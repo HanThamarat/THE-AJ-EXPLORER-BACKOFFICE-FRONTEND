@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  
+  server:
+    restart: always
+    platform: linux/x86_64
+    build:
+      context: ./
+      dockerfile: ${DOCKERFILE:-Dockerfile.dev}
+    ports:
+      - '80:3000'
+    command: npm run dev
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - server
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+
+networks:
+  server:
+    driver: bridge
