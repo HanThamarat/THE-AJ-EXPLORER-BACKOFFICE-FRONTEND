@@ -21,7 +21,7 @@ services:
         - action: rebuild
           path: package.json
     volumes:
-      - .:/app
+      - .:/app:cached
       - /app/node_modules
     networks:
       - server
