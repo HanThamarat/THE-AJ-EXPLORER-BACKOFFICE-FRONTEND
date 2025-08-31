@@ -35,7 +35,9 @@ export default function Home() {
       if (response?.payload?.status  === true) {
         await Cookies.set("authToken", response?.payload?.data?.authToken, { expires: 1, secure: true });
         notify({ label: 'sign in successfully!', type: 'success' });
-        router.push('/cms/dashboard');
+        setTimeout(() => {
+          router.push('/cms/dashboard');
+        }, 2000);
       } else {
         throw `${response?.payload?.error}`;
       }

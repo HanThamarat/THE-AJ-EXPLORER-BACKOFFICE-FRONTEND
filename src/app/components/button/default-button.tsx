@@ -2,6 +2,7 @@ import { Button, ConfigProvider } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { ButtonHTMLType } from "antd/es/button";
 import DotLoader from "../loader/dot";
+import React from "react";
 
 interface ButtonPropType {
     label?: string; 
@@ -10,6 +11,7 @@ interface ButtonPropType {
     color?: string;
     type?: ButtonHTMLType;
     isLoading?: boolean;
+    icon?: any;
 }
 
 export default function DefaultButton({
@@ -18,7 +20,8 @@ export default function DefaultButton({
     size,
     color,
     type,
-    isLoading
+    isLoading,
+    icon
 }: ButtonPropType) {
     return(
         <ConfigProvider
@@ -43,7 +46,10 @@ export default function DefaultButton({
             >
                 {
                     isLoading === false || isLoading === undefined ?
-                    <span className="text-white">{label}</span>
+                    <div className="flex justify-center items-center gap-[5px]">
+                        {icon}
+                        <span className="text-white">{label}</span>
+                    </div>
                     :
                     <DotLoader Colors="#FFFFFF" />
                 } 
