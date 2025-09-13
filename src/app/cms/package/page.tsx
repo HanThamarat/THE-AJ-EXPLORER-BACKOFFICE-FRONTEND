@@ -22,7 +22,7 @@ export default function UserOverview() {
             </div>
             <div className="mt-[25px] bg-white p-[20px] rounded-[20px] w-full">
                 <div>
-                    <span className="text-[16px] font-semibold">All Users</span>
+                    <span className="text-[16px] font-semibold">All Packages</span>
                 </div>
             </div>
         </>
