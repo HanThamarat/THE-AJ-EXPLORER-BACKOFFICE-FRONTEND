@@ -36,7 +36,7 @@ export default function Home() {
         await Cookies.set("authToken", response?.payload?.data?.authToken, { expires: 1, secure: true });
         notify({ label: 'sign in successfully!', type: 'success' });
         setTimeout(() => {
-          router.push('/cms/dashboard');
+          window.location.href = `${process.env.NEXT_PUBLIC_AUTH_CALLBACK}`;
         }, 2000);
       } else {
         throw `${response?.payload?.error}`;

@@ -5,23 +5,41 @@ import Logo from "@/app/assets/images/svg/logo.png";
 import { FiAlignJustify } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { ChevronDown, ChevronRight, Home, Settings, Users } from "lucide-react";
+import { ChevronDown, ChevronRight, Settings, Users } from "lucide-react";
 import { MenuItem } from "@/app/types/menu";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+
+import Luggage from "@/app/assets/images/svg/luggage.svg";
+import dashboard from "@/app/assets/images/svg/bar-chart-square.svg";
 
 export default function SideBar() {
   const router = useRouter();
+  const pathname = usePathname();
+
   const [isOpen, setIsOpen] = useState(true);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const [activePath, setActivePath] = useState<string>("/cms/dashboard");
+  const [activePath, setActivePath] = useState<string>(pathname);
 
-  // Read cookie only once
+  // Read cookie for sidebar open/close state
   useEffect(() => {
     const sideBarCookie = Cookies.get("sideBar");
     if (sideBarCookie !== undefined) {
       setIsOpen(sideBarCookie.toLowerCase() === "true");
     }
   }, []);
+
+  // Update activePath whenever url changes
+  useEffect(() => {
+    if (pathname) {
+      setActivePath(pathname);
+
+      // Auto expand submenu if current path belongs to one
+      const parent = menu.find(
+        (item) => item.subItems?.some((sub) => sub.path === pathname)
+      );
+      if (parent) setOpenMenu(parent.label);
+    }
+  }, [pathname]);
 
   const handleToggleSidebar = () => {
     const status = !isOpen;
@@ -39,13 +57,21 @@ export default function SideBar() {
   };
 
   const menu: MenuItem[] = [
-    { label: "Dashboard", icon: <Home />, path: "/cms/dashboard" },
+    { label: "Dashboard", icon: <Image src={dashboard} alt="" />, path: "/cms/dashboard" },
+    {
+      label: "Package",
+      icon: <Image src={Luggage} alt="" />,
+      subItems: [
+        { label: "Package", path: "/cms/package" },
+        { label: "Package Promotion", path: "/cms/package-promotion" },
+      ],
+    },
     {
       label: "User Management",
       icon: <Users />,
       subItems: [
         { label: "All Users", path: "/cms/usermanagement" },
-        { label: "Add User", path: "/users/add" },
+        { label: "Add User", path: "/cms/usermanagement/add" },
       ],
     },
     {
@@ -70,6 +96,7 @@ export default function SideBar() {
         isOpen ? "w-[278px]" : "w-[70px]"
       } bg-white transition-all duration-300`}
     >
+      {/* Header */}
       <div
         className={`h-[70px] p-[20px] flex ${
           isOpen ? "justify-between" : "justify-center"
@@ -80,7 +107,6 @@ export default function SideBar() {
           <FiAlignJustify className="text-primary text-[24px]" />
         </button>
       </div>
-
       <ul className={`space-y-2 ${isOpen ? "px-[20px]" : "px-[5px]"} mt-[20px]`}>
         {menu.map((item) => (
           <li key={item.label}>
@@ -109,10 +135,8 @@ export default function SideBar() {
                 )
               )}
             </button>
-
-            {/* Sub menu */}
             {item.subItems && openMenu === item.label && (
-              <ul className={`mt-2 space-y-1 bg-[#F5F5F5] rounded-[10px] p-[5px]`}>
+              <ul className="mt-2 space-y-1 bg-[#F5F5F5] rounded-[10px] p-[5px]">
                 {item.subItems.map((sub) => (
                   <li key={sub.label}>
                     <button

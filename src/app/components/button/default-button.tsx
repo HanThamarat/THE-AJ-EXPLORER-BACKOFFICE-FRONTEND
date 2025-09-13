@@ -46,9 +46,9 @@ export default function DefaultButton({
             >
                 {
                     isLoading === false || isLoading === undefined ?
-                    <div className="flex justify-center items-center gap-[5px]">
+                    <div className="flex justify-center items-center gap-[5px] p-[2px]">
                         {icon}
-                        <span className="text-white">{label}</span>
+                        <span className="text-white text-[12px]">{label}</span>
                     </div>
                     :
                     <DotLoader Colors="#FFFFFF" />
