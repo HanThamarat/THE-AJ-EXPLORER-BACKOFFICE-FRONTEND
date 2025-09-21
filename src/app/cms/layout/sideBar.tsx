@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Logo from "@/app/assets/images/svg/logo.png";
+import Logo from "@/app/assets/images/svg/logo.svg";
 import { FiAlignJustify } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -102,7 +102,7 @@ export default function SideBar() {
           isOpen ? "justify-between" : "justify-center"
         } items-center`}
       >
-        {isOpen && <Image src={Logo} alt="Logo" />}
+        {isOpen && <Image src={Logo} width={140} alt="Logo" />}
         <button onClick={handleToggleSidebar}>
           <FiAlignJustify className="text-primary text-[24px]" />
         </button>

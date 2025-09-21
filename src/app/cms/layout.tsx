@@ -11,7 +11,7 @@ export default function CMSLayout({
             <SideBar />
             <div className="w-full">   
                 <Nav />
-                <div className="p-[20px]">
+                <div className="p-[20px] overflow-y-scroll h-[90vh]">
                     {children}
                 </div>
             </div>
