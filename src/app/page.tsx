@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import Logo from '@/app/assets/images/img/logo.png';
+import Logo from '@/app/assets/images/svg/logo-ligth.svg';
 import LogoDash from '@/app/assets/images/img/dashboard.png';
 import DefaultInput from "./components/input/default-input";
 import DefaultButton from "./components/button/default-button";
@@ -54,9 +54,9 @@ export default function Home() {
   return (
     <div className="h-screen flex w-full justify-between">
       <div className="w-1/2 bg-primary p-[20px]">
-        <Image src={Logo} alt="" />
+        <Image src={Logo} width={250} alt="" />
         <div className="h-[80vh] flex justify-center items-center">
-          <Image src={LogoDash} alt="" />
+          <Image src={LogoDash}  alt="" />
         </div>
       </div>
       <div className="w-1/2 flex justify-center items-center">

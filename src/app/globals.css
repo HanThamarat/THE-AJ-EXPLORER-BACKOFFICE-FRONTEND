@@ -13,7 +13,8 @@ body {
 }
 
 @theme {
-  --color-primary: #002B3F;
+  --color-primary: #2C0735;
+  --color-secondary: #613DC1;
 }
 
 @font-face {
