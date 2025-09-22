@@ -64,6 +64,7 @@ export default function SideBar() {
       subItems: [
         { label: "Package", path: "/cms/package" },
         { label: "Package Promotion", path: "/cms/package-promotion" },
+        { label: "Package Type", path: "/cms/package/package_type" },
       ],
     },
     {
