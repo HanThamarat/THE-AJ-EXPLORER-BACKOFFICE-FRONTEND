@@ -1,48 +1,43 @@
 "use client"
 
-import DefaultButton from "@/app/components/button/default-button";
-import { FiPlus } from "react-icons/fi";
-import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/app/hook/appDispatch";
+import PkgTypeModal from "./modal/packageTypeModal";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { packageSelector } from "@/app/store/slice/packageManagement";
-import { useRef, useEffect, useState } from "react";
-import { getAllPacakges } from "@/app/store/slice/packageManagement";
-import DataTable from "@/app/components/table/dataTable";
-import { ColumnDef } from "@tanstack/react-table";
-import { packageDataTable } from "@/app/types/package";
-import dateFormat from "dateformat";
+import { useAppDispatch } from "@/app/hook/appDispatch";
+import { pkgTypeSelector } from "@/app/store/slice/pkgTypeManangementSlice";
+import { getAllPkgType } from "@/app/store/slice/pkgTypeManangementSlice";
 import TableLoader from "@/app/components/loader/tableLoader";
-import { IoEyeOutline } from "react-icons/io5";
+import DataTable from "@/app/components/table/dataTable";
 import DefaultEmpty from "@/app/components/empty/default-emtpy";
+import { packageTypeDataTable, packageTypeEntity } from "@/app/types/package";
+import { ColumnDef } from "@tanstack/react-table";
+import dateFormat from "dateformat";
+import { IoEyeOutline } from "react-icons/io5";
+import DelPkgTypeModal from "./modal/delPkgTypeModal";
 
-export default function UserOverview() {
 
-    const router = useRouter();
+export default function PackageTypePage({}) {
+
     const dispatch = useAppDispatch();
-    const { packages } = useSelector(packageSelector);
+    const { pkgTypes } = useSelector(pkgTypeSelector);
     const isFaching = useRef(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [packageData, setPackageData] = useState<packageDataTable[] | []>([]);
+    const [pkgTypesData, setpkgTypesData] = useState<packageTypeDataTable[] | []>([]);
 
-    const columns: ColumnDef<packageDataTable>[] = [
+    const columns: ColumnDef<packageTypeDataTable>[] = [
         {
             accessorKey: "index",
             header: "#",
         },
         {
-            accessorKey: "packageName",
-            header: "Package Name",
-        },
-        {
-            accessorKey: "packageType",
-            header: "Package Type",
+            accessorKey: "name",
+            header: "Name"
         },
         {
             accessorKey: "status",
             header: "Status",
             cell: ({ row }) => (
-               <div>
+                <div>
                     {
                         row.original.status === true ?
                         <div className="flex items-center w-fit py-[2px] px-[10px] gap-[10px] bg-[#ECFDF3] rounded-full">
@@ -59,14 +54,14 @@ export default function UserOverview() {
             )
         },
         {
-            accessorKey: "create_by",
+            accessorKey: "created_by",
             header: "Create By",
         },
         {
-            accessorKey: "lastupdated",
+            accessorKey: "updated_at",
             header: "Last Updated",
             cell: ({ row }) => (
-                <p>{dateFormat(row.original.lastupdated, "mediumDate")}</p>
+                <p>{dateFormat(row.original.updated_at, "mediumDate")}</p>
             )
         },
         {
@@ -77,10 +72,9 @@ export default function UserOverview() {
             id: "actions",
             header: "",
             cell: ({ row }) => (
-                <div className="flex gap-[10px] items-center">
-                    <button  onClick={() => alert(`Edit user ${row.original.packageId}`)} >
-                        <IoEyeOutline className="text-[20px] font-bold text-[#535862]" />
-                    </button>
+                <div className="flex gap-4 items-center">
+                    <PkgTypeModal pkgType={row.original as packageTypeEntity} />
+                    <DelPkgTypeModal pkgTypeId={row.original.id} />
                 </div>
             ),
         },
@@ -88,46 +82,42 @@ export default function UserOverview() {
 
     useEffect(() => {
         setIsLoading(true);
-        const getAllPkg = async () => {
+        const getPkgTYP = async () => {
             if (isFaching.current) return;
             isFaching.current = true;
-            await dispatch(getAllPacakges());            
+            await dispatch(getAllPkgType());
             isFaching.current = false;
         }
 
-        packages === null ? getAllPkg() : setIsLoading(false);
+        pkgTypes === null ? getPkgTYP() : setIsLoading(false);
 
-        if(packages?.length !== 0) {
-            const pkgsFormat: packageDataTable[] =  packages ? packages?.map((data, key) => ({
+        if (pkgTypes?.length !== 0) {
+            const pkgTypeDataFormat: packageTypeDataTable[] = pkgTypes ? pkgTypes.map((data, key) => ({
                 index: key + 1,
-                packageId: data.id,
-                packageName: data.packageName,
-                packageType: data.packageType,
+                id: data.id,
+                name: data.name,
                 status: data.status,
-                create_by: data.created_by,
-                lastupdated: new Date(data.updated_at),
-                updated_by: data.updated_by
+                created_by: data.created_by,
+                created_at: new Date(data.created_at),
+                updated_by: data.updated_by,
+                updated_at: new Date(data.updated_at)
             })) : [];
-            setPackageData(pkgsFormat);         
+            
+            setpkgTypesData(pkgTypeDataFormat);
         }
-    }, [dispatch, packages]);
-
+        
+    }, [dispatch, pkgTypes]);
 
     return(
         <>
             <div className="w-full flex justify-end">
                 <div>
-                    <DefaultButton
-                        label="Create New Package"
-                        size="large"
-                        icon={<FiPlus className="text-white text-[16px]" />} 
-                        onClick={() => router.push('/cms/usermanagement/create')}
-                    />
+                    <PkgTypeModal />
                 </div>
             </div>
-            <div className="mt-[25px] bg-white rounded-[20px] w-full">
+            <div className="bg-white rounded-[20px] w-full mt-[25px]">
                 <div className="p-[20px]">
-                    <span className="text-[16px] font-semibold">All Packages</span>
+                    <span className="text-[16px] font-semibold">All Pacakge Type</span>
                 </div>
                 {
                     isLoading ?
@@ -136,9 +126,9 @@ export default function UserOverview() {
                     </div>
                     :
                     (
-                    packageData.length !== 0 ?
+                        pkgTypes?.length !== 0 ?
                         <div className="pb-[20px]">
-                            <DataTable data={packageData} columns={columns} globalFilter={false} />
+                            <DataTable data={pkgTypesData} columns={columns} />
                         </div>
                         :
                         <DefaultEmpty />
@@ -147,4 +137,4 @@ export default function UserOverview() {
             </div>
         </>
     );
-};
+}

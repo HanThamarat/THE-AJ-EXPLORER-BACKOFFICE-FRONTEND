@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased text-[12px] font-primary`}
+        className={`antialiased text-[12px]`}
       >
         <ReduxProvider>
           <AntdRegistry>

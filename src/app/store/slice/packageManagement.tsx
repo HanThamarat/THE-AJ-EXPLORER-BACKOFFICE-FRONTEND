@@ -43,7 +43,6 @@ const packageSlice = createSlice({
                 state.loading = false;
                 if (action.type.includes('getAllPacakges')) {
                     state.packages = action.payload.data as packageEntity[];
-                     console.log(state.packages);
                 }
             }
         )

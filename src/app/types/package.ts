@@ -1,3 +1,19 @@
+import z from "zod";
+
+export const pkgTypeSchema = z.object({
+    name: z.string().min(0).max(100),
+}).superRefine((data, ctx) => {
+    if (data.name.length === 0) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Please complete all the required information.",
+            path: ['name'],
+        });
+    }
+});
+
+export type pkgTypeSchemaType = z.infer<typeof pkgTypeSchema>;
+
 export interface packageEntity {
     id:                 number;
     packageName:        string;
@@ -68,4 +84,31 @@ export interface packageDataTable {
     create_by:          string;
     lastupdated:        Date;
     updated_by:         string;
+}
+
+
+export interface packageTypeDTO {
+    name:       string;
+    status:     boolean;
+}
+
+export interface packageTypeEntity  {
+    id:         number;
+    name:       string;
+    status:     boolean;
+    created_by: string;
+    created_at: Date | string;
+    updated_by: string;
+    updated_at: Date | string;
+} 
+
+export interface packageTypeDataTable {
+    index:          number;
+    id:             number;
+    name:           string;
+    status:         boolean;
+    created_by:     string;
+    created_at:     Date | string;
+    updated_by:     string;
+    updated_at:     Date | string;
 }
