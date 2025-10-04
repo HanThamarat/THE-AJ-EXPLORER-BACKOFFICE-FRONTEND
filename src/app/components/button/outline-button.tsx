@@ -5,7 +5,7 @@ import DotLoader from "../loader/dot";
 import React from "react";
 
 interface ButtonPropType {
-    label?: string; 
+    label?: string | any; 
     onClick?: () => void;
     size?: SizeType;
     color?: string;

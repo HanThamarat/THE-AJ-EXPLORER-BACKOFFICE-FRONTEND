@@ -1,13 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { AxiosInstance } from "@/app/hook/axiosInstance";
-import { PackageDTO, packageEntity } from "@/app/types/package";
+import { districtEntity, provinceEntiry } from "@/app/types/geolocation";
 
-
-
-export const getAllPacakges = createAsyncThunk('packageManagement/getAllPacakges', async() => {
+export const getAllProvinces = createAsyncThunk('geolocation/getAllProvinces', async () => {
     try {
-        const response = await AxiosInstance.get('/packagemanagement/package');
+        const response = await AxiosInstance.get('/geolocation/provinces');
 
         return { status: true, data: response.data.body };
     } catch (error: any) {
@@ -15,9 +13,9 @@ export const getAllPacakges = createAsyncThunk('packageManagement/getAllPacakges
     }
 });
 
-export const createPacakage = createAsyncThunk('packageManagement/createPacakage', async(data: PackageDTO) => {
+export const getDistrictByProId = createAsyncThunk("geolocation/getDistrictByProId", async (id: number) => {
     try {
-        const response = await AxiosInstance.post('/packagemanagement/package', data);
+        const response = await AxiosInstance.get(`/geolocation/district/${id}`);
 
         return { status: true, data: response.data.body };
     } catch (error: any) {
@@ -25,20 +23,22 @@ export const createPacakage = createAsyncThunk('packageManagement/createPacakage
     }
 });
 
-interface packageType {
-    packages: packageEntity[] | [] | null;
+interface geolocationType {
+    province: provinceEntiry[] | [] | null;
+    district: districtEntity[] | [] | null;
     loading: boolean;
     error: unknown;
 }
 
-const initialState: packageType = {
-    packages: null,
+const initialState: geolocationType = {
+    province: null,
+    district: null,
     loading: false,
     error: null
 }
 
-const packageSlice = createSlice({
-    name: 'packageManagement',
+const geolocationSlice = createSlice({
+    name: 'geolocation',
     initialState: initialState,
     reducers: {},
     extraReducers(builder) {
@@ -53,13 +53,10 @@ const packageSlice = createSlice({
             (action) => action.type.endsWith("/fulfilled"),
             (state, action: PayloadAction<{ data?: any }>) => {
                 state.loading = false;
-                if (action.type.includes('getAllPacakges')) {
-                    state.packages = action.payload.data as packageEntity[];
-                } else if (action.type.includes('createPacakage')) {
-                    if (action.payload.data) state.packages = [
-                        ...state?.packages ? state.packages : [],
-                        action.payload.data as packageEntity
-                    ];
+                if (action.type.includes('getAllProvinces')) {
+                    state.province = action.payload.data as provinceEntiry[];
+                } else if (action.type.includes('getDistrictByProId')) {
+                    state.district = action.payload.data as districtEntity[];
                 }
             }
         )
@@ -73,5 +70,5 @@ const packageSlice = createSlice({
     },
 });
 
-export default packageSlice.reducer;
-export const packageSelector = (state: RootState) => state.package;
+export default geolocationSlice.reducer;
+export const geolocationSelector = (state: RootState) => state.geolocation;
