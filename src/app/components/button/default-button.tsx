@@ -39,7 +39,7 @@ export default function DefaultButton({
         }}
         >
             <Button 
-                size={ size === undefined ? 'large' : size} 
+                size={ size === undefined ? 'large' : size } 
                 className="w-full"
                 onClick={onClick}
                 htmlType={ type === undefined ? 'button' : type }

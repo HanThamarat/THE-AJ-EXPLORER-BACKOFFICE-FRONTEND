@@ -9,9 +9,9 @@ export default function CMSLayout({
         <>
         <div className="flex h-screen">
             <SideBar />
-            <div className="w-full">   
-                <Nav />
-                <div className="p-[20px] overflow-y-scroll h-[90vh]">
+            <div className="w-full flex flex-col">   
+                <Nav  />
+                <div className="p-[20px] overflow-y-scroll flex-1">
                     {children}
                 </div>
             </div>

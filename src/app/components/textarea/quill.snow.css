@@ -1,0 +1,18 @@
+/* App.css or a CSS module */
+.ql-toolbar {
+  background-color: #f0f0f0;
+  border-radius: 8px 8px 0 0;
+  border: 1px solid #ccc;
+}
+
+.ql-container {
+  min-height: 200px;
+  border-radius: 0 0 8px 8px;
+  border: 1px solid #ccc;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+}
+
+.ql-editor {
+  padding: 12px;
+}

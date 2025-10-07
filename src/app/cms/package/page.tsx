@@ -121,7 +121,7 @@ export default function UserOverview() {
                         label="Create New Package"
                         size="large"
                         icon={<FiPlus className="text-white text-[16px]" />} 
-                        onClick={() => router.push('/cms/usermanagement/create')}
+                        onClick={() => router.push('/cms/package/form')}
                     />
                 </div>
             </div>

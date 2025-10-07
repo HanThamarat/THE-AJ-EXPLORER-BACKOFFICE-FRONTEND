@@ -12,7 +12,54 @@ export const pkgTypeSchema = z.object({
     }
 });
 
+export const packageAttractionSchema = z.object({
+    attractionName:     z.string().min(3),
+    attractionTime:     z.date().min(3),
+    description:       z.string(),
+    status:             z.boolean(),
+});
+
+export const packageOptionSchema = z.object({
+    pkgOptionTypeId:    z.number().int().min(1),
+    name:               z.string().min(3),
+    description:        z.string(),
+    adultPrice:        z.number().min(1),
+    childPrice:        z.number().min(1),
+    groupPrice:        z.number().min(1),
+});
+
+export const packageIncludeSchema = z.object({
+    detail: z.string(),
+});
+
+export const packageNotIncludeSchema = z.object({
+    detail: z.string(),
+});
+
+export const packageSchema = z.object({
+    packageTypeId: z.number({ message: "Please complete all the required information." }).int({ message: "Please complete all the required information." }).min(1, { message: "Please complete all the required information." }),
+    packageName: z.string().min(3, { message: "Please complete all the required information." }).max(100),
+    description: z.string({ message: "Please complete all the required information." }).min(10, { message: "Please complete all the required information." }).max(6000),
+    additional_description: z.string().min(0),
+    provinceId: z.number({ message: "Please complete all the required information." }).int({ message: "Please complete all the required information." }).min(1, { message: "Please complete all the required information." }),
+    districtId: z.number({ message: "Please complete all the required information." }).int({ message: "Please complete all the required information." }).min(1, { message: "Please complete all the required information." }),
+    subDistrictId: z.number({ message: "Please complete all the required information." }).int({ message: "Please complete all the required information." }).min(1, { message: "Please complete all the required information." }),
+    depart_point_lon: z.string().min(0).max(100),
+    depart_point_lat: z.string().min(0).max(100),
+    end_point_lon: z.string().min(0).max(100),
+    end_point_lat: z.string().min(0).max(100),
+    benefit_include: z.array(packageIncludeSchema).min(1).max(20),
+    benefit_not_include: z.array(packageNotIncludeSchema).min(1).max(20),
+    status: z.boolean(),
+    packageImage: z.string(),
+    packageOption: z.array(packageOptionSchema).min(1).max(20),
+    packageAttraction: z.array(packageAttractionSchema).min(1).max(20)
+});
+
 export type pkgTypeSchemaType = z.infer<typeof pkgTypeSchema>;
+export type PackageDTO = z.infer<typeof packageSchema>;
+export type PackageOptionDTO = z.infer<typeof packageOptionSchema>;
+export type PackageAttractionDTO = z.infer<typeof packageAttractionSchema>;
 
 export interface packageEntity {
     id:                 number;
@@ -40,9 +87,9 @@ export interface packageEntity {
 
 export interface packageAttractionEntity {
     attractionName:     string;
-    attractionTime:     Date;
+    attractionTime:     Date| string;
     description?:       string;
-    status:             boolean;
+    status?:             boolean;
 }
 
 export interface packageOptionEntity {
