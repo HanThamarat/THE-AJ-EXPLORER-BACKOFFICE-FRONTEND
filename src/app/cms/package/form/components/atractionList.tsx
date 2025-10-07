@@ -97,7 +97,7 @@ export default function AttractionList({
             label="Time"
             placeholder="Select time"
             value={attractionTime}
-            onChange={(e) => setAttractionTime(e)}
+            onChange={(e) => setAttractionTime(e as string)}
           />
 
           <div className="mt-[20px]">

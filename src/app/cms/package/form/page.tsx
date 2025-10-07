@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Mockup from "@/app/assets/images/svg/mockup_1.svg";
+import BenefitMockup from "@/app/assets/images/svg/benefit.svg";
 import DefaultSwitch from "@/app/components/switch/default-switch";
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
@@ -19,7 +20,22 @@ import TextEditor from "@/app/components/textarea/text-editor";
 import { geolocationSelector } from "@/app/store/slice/geolocationSlice";
 import { getAllProvinces, getDistrictByProId } from "@/app/store/slice/geolocationSlice";
 import { districtEntity, subDistrictEntity } from "@/app/types/geolocation";
-import AttractionList from "./components/atractionList";
+import dynamic from "next/dynamic";
+import TableLoader from "@/app/components/loader/tableLoader";
+
+// components
+const AttractionList = dynamic(() => import("./components/atractionList"), {
+    loading: () => <TableLoader />,
+    ssr: false
+});
+const IncludeList = dynamic(() => import("./components/includeList"), {
+    loading: () =>  <TableLoader />,
+    ssr: false
+});
+const NotInclueList = dynamic(() => import("./components/not-includeList"));
+// import AttractionList from "./components/atractionList";
+// import IncludeList from "./components/includeList";
+
 
 
 export default function PacakageForm() {
@@ -295,7 +311,52 @@ export default function PacakageForm() {
                             <Image src={Mockup} alt="" />
                         </div>
                         <div className="justify-center flex w-full">
-                            <span className="text-center w-full">Create your package new to better your business </span>
+                            <span className="text-center w-full">Create your package new to better your business</span>
+                        </div>
+                   </div>
+                </div>
+            </div>
+            {/* benefit components */}
+            <div className="mt-[20px]">
+                <span className="text-[18px] font-medium">Add Benefit</span>
+                <span className="block text-gray-600">Please enter form below for add benefit to customer.</span>
+            </div>
+            <div className="w-full p-[20px] bg-white mt-[10px] rounded-[20px] flex justify-between gap-[10px]">
+                <div className="w-full">
+                    <div>
+                        <Controller
+                            name="benefit_include"
+                            control={control}
+                            render={({ field }) => (
+                                <IncludeList
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            )}
+                        />
+                        { errors.benefit_include && <span className='text-red-500'>{errors.benefit_include.message}</span> }
+                    </div>
+                    <div className="mt-[20px]">
+                        <Controller
+                            name="benefit_not_include"
+                            control={control}
+                            render={({ field }) => (
+                                <NotInclueList
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            )}
+                        />
+                        { errors.benefit_include && <span className='text-red-500'>{errors.benefit_include.message}</span> }
+                    </div>
+                </div>
+                <div className="w-[40%] flex justify-center items-center">
+                   <div>
+                        <div className="justify-center items-center flex w-full">
+                            <Image src={BenefitMockup} alt="" />
+                        </div>
+                        <div className="justify-center flex w-full">
+                            <span className="text-center w-full">give benefit to customer</span>
                         </div>
                    </div>
                 </div>

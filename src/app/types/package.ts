@@ -28,6 +28,14 @@ export const packageOptionSchema = z.object({
     groupPrice:        z.number().min(1),
 });
 
+export const packageIncludeSchema = z.object({
+    detail: z.string(),
+});
+
+export const packageNotIncludeSchema = z.object({
+    detail: z.string(),
+});
+
 export const packageSchema = z.object({
     packageTypeId: z.number({ message: "Please complete all the required information." }).int({ message: "Please complete all the required information." }).min(1, { message: "Please complete all the required information." }),
     packageName: z.string().min(3, { message: "Please complete all the required information." }).max(100),
@@ -40,12 +48,12 @@ export const packageSchema = z.object({
     depart_point_lat: z.string().min(0).max(100),
     end_point_lon: z.string().min(0).max(100),
     end_point_lat: z.string().min(0).max(100),
-    benefit_include: z.string(),
-    benefit_not_include: z.string(),
+    benefit_include: z.array(packageIncludeSchema).min(1).max(20),
+    benefit_not_include: z.array(packageNotIncludeSchema).min(1).max(20),
     status: z.boolean(),
     packageImage: z.string(),
-    packageOption: z.array(packageOptionSchema),
-    packageAttraction: z.array(packageAttractionSchema)
+    packageOption: z.array(packageOptionSchema).min(1).max(20),
+    packageAttraction: z.array(packageAttractionSchema).min(1).max(20)
 });
 
 export type pkgTypeSchemaType = z.infer<typeof pkgTypeSchema>;
