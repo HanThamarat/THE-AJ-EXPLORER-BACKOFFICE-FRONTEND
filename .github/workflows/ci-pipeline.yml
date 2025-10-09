@@ -12,13 +12,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Create .env.production
-      run: |
-        echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env.production
-        echo "NEXT_PUBLIC_AUTH_CALLBACK=${{ secrets.NEXT_PUBLIC_AUTH_CALLBACK }}" >> .env.production
-        echo "NEXT_PUBLIC_WEB_SOCKET=${{ secrets.NEXT_PUBLIC_WEB_SOCKET }}" >> .env.production
-        echo "NEXT_PUBLIC_GOOGLE_MAP_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_KEY }}" >> .env.production
-
     - name: Login to DockerHub
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -33,8 +26,14 @@ jobs:
       run: |
         echo "IMAGE_NAME_THE_AJ_CMS_APP is $IMAGE_NAME_THE_AJ_CMS_APP"
 
-    - name: Build and push Backend API Docker Image
+    - name: Build and push Docker Image
       run: |
-        ls -l Dockerfile.prod  # Ensure correct Dockerfile
-        docker build  -t $IMAGE_NAME_THE_AJ_CMS_APP -f Dockerfile.prod .
+        ls -l Dockerfile.prod
+        docker build \
+        --build-arg NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}" \
+        --build-arg NEXT_PUBLIC_AUTH_CALLBACK="${{ secrets.NEXT_PUBLIC_AUTH_CALLBACK }}" \
+        --build-arg NEXT_PUBLIC_WEB_SOCKET="${{ secrets.NEXT_PUBLIC_WEB_SOCKET }}" \
+        --build-arg NEXT_PUBLIC_GOOGLE_MAP_KEY="${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_KEY }}" \
+        -t $IMAGE_NAME_THE_AJ_CMS_APP \
+        -f Dockerfile.prod .
         docker push $IMAGE_NAME_THE_AJ_CMS_APP
