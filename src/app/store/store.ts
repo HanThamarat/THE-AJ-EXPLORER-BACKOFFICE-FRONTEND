@@ -5,6 +5,7 @@ import userReducer from './slice/userManagement';
 import pkgReducer from './slice/packageManagement';
 import pkgTypeReducer from './slice/pkgTypeManangementSlice';
 import geolocationReducer from "./slice/geolocationSlice";
+import financialReducer from "./slice/financialSlice";
 
 export const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
         package: pkgReducer,
         pkgType: pkgTypeReducer,
         geolocation: geolocationReducer,
+        financial: financialReducer,
     },
     devTools: process.env.NODE_ENV !== 'production',
 });
