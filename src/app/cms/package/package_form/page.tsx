@@ -16,7 +16,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import DefaultButton from "@/app/components/button/default-button";
 import { getAllPkgType } from "@/app/store/slice/pkgTypeManangementSlice";
 import { pkgTypeSelector } from "@/app/store/slice/pkgTypeManangementSlice";
-import TextEditor from "@/app/components/textarea/text-editor";
 import { geolocationSelector } from "@/app/store/slice/geolocationSlice";
 import { getAllProvinces, getDistrictByProId } from "@/app/store/slice/geolocationSlice";
 import { districtEntity, subDistrictEntity } from "@/app/types/geolocation";
@@ -33,6 +32,9 @@ const IncludeList = dynamic(() => import("./components/includeList"), {
     ssr: false
 });
 const NotInclueList = dynamic(() => import("./components/not-includeList"));
+const TextEditor = dynamic(() => import("@/app/components/textarea/text-editor"), {
+  ssr: false,
+});
 // import AttractionList from "./components/atractionList";
 // import IncludeList from "./components/includeList";
 
