@@ -12,6 +12,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Create .env.production
+      run: |
+        echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env.production
+        echo "NEXT_PUBLIC_AUTH_CALLBACK=${{ secrets.NEXT_PUBLIC_AUTH_CALLBACK }}" >> .env.production
+        echo "NEXT_PUBLIC_WEB_SOCKET=${{ secrets.NEXT_PUBLIC_WEB_SOCKET }}" >> .env.production
+        echo "NEXT_PUBLIC_GOOGLE_MAP_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAP_KEY }}" >> .env.production
+
     - name: Login to DockerHub
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
