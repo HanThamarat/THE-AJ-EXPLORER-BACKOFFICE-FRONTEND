@@ -1,0 +1,47 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - name: Set IMAGE_NAME variables
+      run: |
+        echo "IMAGE_NAME_THE_AJ_CMS_APP=hanthamarats/the-ajexplorer-cms-app:latest" >> $GITHUB_ENV
+
+    - name: Debug IMAGE_NAME variables
+      run: |
+        echo "IMAGE_NAME_THE_AJ_CMS_APP is $IMAGE_NAME_THE_AJ_CMS_APP"
+
+    - name: Delete Old the-aj-explorer-cms-app docker container
+      run: sudo docker rm -f the-aj-explorer-cms-app || true
+
+    - name: Delete Old docker image
+      run: sudo docker images | grep hanthamarats/the-ajexplorer-cms-app | awk '{print $3}' | xargs sudo docker rmi || true
+
+    - name: Pull Docker image
+      run: sudo docker pull $IMAGE_NAME_THE_AJ_CMS_APP
+
+    - name: Create Docker network (safe)
+      run: sudo docker network create aj-network || echo "Network already exists ✅"
+
+    - name: Run Docker Backend Container
+      env:
+        SERVER_PORT: ${{secrets.SERVER_PORT}}
+        PORT: ${{secrets.PORT}}
+        NEXT_PUBLIC_API_URL: ${{secrets.NEXT_PUBLIC_API_URL}}
+        NEXT_PUBLIC_AUTH_CALLBACK: ${{secrets.NEXT_PUBLIC_AUTH_CALLBACK}}
+        NEXT_PUBLIC_WEB_SOCKET: ${{secrets.NEXT_PUBLIC_WEB_SOCKET}}
+        NEXT_PUBLIC_GOOGLE_MAP_KEY: ${{secrets.NEXT_PUBLIC_GOOGLE_MAP_KEY}}
+      run: sudo docker run -p $SERVER_PORT:$SERVER_PORT -e PORT=$PORT -e NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL -e NEXT_PUBLIC_AUTH_CALLBACK=$NEXT_PUBLIC_AUTH_CALLBACK  -e NEXT_PUBLIC_WEB_SOCKET=$NEXT_PUBLIC_WEB_SOCKET -e NEXT_PUBLIC_GOOGLE_MAP_KEY=$NEXT_PUBLIC_GOOGLE_MAP_KEY -d --name the-aj-explorer-cms-app $IMAGE_NAME_THE_AJ_CMS_APP
+
+    - name: Connect docker network
+      run: sudo docker network connect aj-network the-aj-explorer-cms-app
