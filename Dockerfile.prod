@@ -40,7 +40,6 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 # Copy built Next.js files from builder stage
-COPY --from=builder .env.production .env.production
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/public ./public
