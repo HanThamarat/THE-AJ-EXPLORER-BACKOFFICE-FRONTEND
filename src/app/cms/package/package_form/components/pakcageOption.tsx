@@ -93,6 +93,16 @@ export default function PackageOption({
 
             setPackageOptionArr((prev) => [...prev, newPackageOption]);
         }
+
+        setPackageOptionTYPSelected(1);
+        setOptionName("");
+        setAdultPrice("");
+        setChildPrice("");
+        setGroupPrice("");
+        setAdultAgeRate({ from: "", to: "" });
+        setchildAgeRate({ from: "", to: "" });
+        setGroupAgeRate({ from: "", to: "" });
+        setDescription("");
     };
 
     const handlerOpenModal = (index: number) => {
@@ -148,6 +158,7 @@ export default function PackageOption({
                                 label="Adult Price *"
                                 placeholder="Please enter price."
                                 value={adultPrice}
+                                type="number"
                                 onChange={(e) => setAdultPrice(e.target.value)}
                             />
                             <AgeRateInput
@@ -160,6 +171,7 @@ export default function PackageOption({
                                 label="Child Price *"
                                 placeholder="Please enter price."
                                 value={childPrice}
+                                type="number"
                                 onChange={(e) => setChildPrice(e.target.value)}
                             />
                             <AgeRateInput
@@ -176,6 +188,7 @@ export default function PackageOption({
                             label="Group Price *"
                             placeholder="Please enter price."
                             value={GroupPrice}
+                            type="number"
                             onChange={(e) => setGroupPrice(e.target.value)}
                         />
                         <AgeRateInput
