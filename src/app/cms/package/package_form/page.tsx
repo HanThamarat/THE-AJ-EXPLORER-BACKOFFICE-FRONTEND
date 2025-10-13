@@ -21,6 +21,7 @@ import { getAllProvinces, getDistrictByProId } from "@/app/store/slice/geolocati
 import { districtEntity, subDistrictEntity } from "@/app/types/geolocation";
 import dynamic from "next/dynamic";
 import TableLoader from "@/app/components/loader/tableLoader";
+import PackagOtpSvg from "@/app/assets/images/svg/package_option_mockup.svg";
 
 // components
 const AttractionList = dynamic(() => import("./components/atractionList"), {
@@ -31,10 +32,18 @@ const IncludeList = dynamic(() => import("./components/includeList"), {
     loading: () =>  <TableLoader />,
     ssr: false
 });
-const NotInclueList = dynamic(() => import("./components/not-includeList"));
+const NotInclueList = dynamic(() => import("./components/not-includeList"), {
+    loading: () => <TableLoader />,
+    ssr: false
+});
 const TextEditor = dynamic(() => import("@/app/components/textarea/text-editor"), {
   ssr: false,
 });
+const PackageOption = dynamic(() => import("./components/pakcageOption"), {
+    loading: () => <TableLoader />,
+    ssr: false,
+});
+
 // import AttractionList from "./components/atractionList";
 // import IncludeList from "./components/includeList";
 
@@ -319,7 +328,7 @@ export default function PacakageForm() {
                 </div>
             </div>
             {/* benefit components */}
-            <div className="mt-[20px]">
+            <div className="mt-[30px]">
                 <span className="text-[18px] font-medium">Add Benefit</span>
                 <span className="block text-gray-600">Please enter form below for add benefit to customer.</span>
             </div>
@@ -359,6 +368,36 @@ export default function PacakageForm() {
                         </div>
                         <div className="justify-center flex w-full">
                             <span className="text-center w-full">give benefit to customer</span>
+                        </div>
+                   </div>
+                </div>
+            </div>
+            {/* package option components */}
+            <div className="mt-[30px]">
+                <span className="text-[18px] font-medium">Add package option</span>
+                <span className="block text-gray-600">Please enter form below for create package option..</span>
+            </div>
+            <div className="w-full p-[20px] bg-white mt-[10px] rounded-[20px] flex justify-between gap-[10px]">
+                <div className="w-full">
+                    <Controller
+                        name="packageOption"
+                        control={control}
+                        render={({ field }) => (
+                            <PackageOption 
+                                value={field.value}
+                                onChange={field.onChange}
+                            />
+                        )}
+                    />
+                    { errors.packageOption && <span className='text-red-500'>{errors.packageOption.message}</span> }
+                </div>
+                <div className="w-[40%] flex justify-center items-center">
+                   <div>
+                        <div className="justify-center items-center flex w-full">
+                            <Image src={PackagOtpSvg} alt="" />
+                        </div>
+                        <div className="justify-center flex w-full">
+                            <span className="text-center w-full">Add new for give choices to customer choose</span>
                         </div>
                    </div>
                 </div>

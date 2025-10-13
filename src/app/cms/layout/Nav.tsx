@@ -53,7 +53,7 @@ export default function Nav() {
     }, [dispatch, userInfo]);
 
     return(
-        <div className="w-full h-[70px] bg-white flex justify-between items-center px-[20px]">
+        <div className="w-full h-[70px] bg-white flex justify-between items-center px-[20px] border-b border-l border-b-gray-100 border-l-gray-50">
             <div>
 
             </div>

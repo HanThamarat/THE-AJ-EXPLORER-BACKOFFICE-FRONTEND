@@ -23,9 +23,15 @@ export const packageOptionSchema = z.object({
     pkgOptionTypeId:    z.number().int().min(1),
     name:               z.string().min(3),
     description:        z.string(),
-    adultPrice:        z.number().min(1),
-    childPrice:        z.number().min(1),
-    groupPrice:        z.number().min(1),
+    adultFromAge:       z.string().min(0),
+    adultToAge:         z.string().min(0),
+    childFromAge:       z.string().min(0),
+    childToAge:         z.string().min(0),
+    groupFromAge:       z.string().min(0),
+    groupToAge:         z.string().min(0),
+    adultPrice:         z.number().min(0),
+    childPrice:         z.number().min(0),
+    groupPrice:         z.number().min(0),
 });
 
 export const packageIncludeSchema = z.object({

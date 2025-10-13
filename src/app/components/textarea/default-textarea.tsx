@@ -7,17 +7,16 @@ interface InputPropType {
   color?: string;
   placeholder: string;
   value?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const DefaultInput = React.forwardRef<InputRef, InputPropType>(
+const DefaultTextArea = React.forwardRef<InputRef, InputPropType>(
   ({ placeholder, label, color, onChange, value, ...rest }, ref: any) => {
     return (
         <div className="w-full grid grid-cols-1 gap-[2px]">
           {label && <span className="font-medium text-[12px]">{label}</span>}
-          <input
-            className="border hover:border-primary hover:outline-2 hover:outline-[#EAF4FF] h-[40px] rounded-[6px] px-[10px] text-[14px] border-[#d7dade] focus:border-primary focus:outline-2 focus:outline-[#EAF4FF] outline-0 duration-100 ease-in-out"
-            type="text" 
+          <textarea
+            className="border hover:border-primary hover:outline-2 hover:outline-[#EAF4FF] min-h-[90px] rounded-[6px] p-[10px] text-[14px] border-[#d7dade] focus:border-primary focus:outline-2 focus:outline-[#EAF4FF] outline-0 duration-100 ease-in-out"
             {...rest} 
             ref={ref}
             placeholder={placeholder}
@@ -29,4 +28,4 @@ const DefaultInput = React.forwardRef<InputRef, InputPropType>(
   }
 );
 
-export default DefaultInput;
+export default DefaultTextArea;
