@@ -78,7 +78,7 @@ export default function UserOverview() {
             header: "",
             cell: ({ row }) => (
                 <div className="flex gap-[10px] items-center">
-                    <button  onClick={() => alert(`Edit user ${row.original.packageId}`)} >
+                    <button onClick={() => alert(`Edit user ${row.original.packageId}`)} >
                         <IoEyeOutline className="text-[20px] font-bold text-[#535862]" />
                     </button>
                 </div>
