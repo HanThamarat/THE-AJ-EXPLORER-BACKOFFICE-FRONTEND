@@ -8,6 +8,7 @@ import DefaultButton from "@/app/components/button/default-button";
 import { PackageOptionDTO } from "@/app/types/package";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { DeleteConfirmModal } from "@/app/components/modal/default-modal";
+import { CurrencyConvert } from "@/app/hook/currencyConvertion";
 
 interface PackageOptionProps {
     value?: PackageOptionDTO[],
@@ -224,7 +225,7 @@ export default function PackageOption({
                                     <div className="p-[10px] flex justify-between items-center">
                                         <span className="text-[20px] font-semibold">{data.name}</span>
                                         <div>
-                                            <span className="font-medium">{data.pkgOptionTypeId === 2 ? data.groupPrice : data.adultPrice} THB</span>
+                                            <span className="font-medium">{data.pkgOptionTypeId === 2 ? CurrencyConvert.formatAsThb(data.groupPrice) : CurrencyConvert.formatAsThb(data.adultPrice)}</span>
                                             <button type="button" onClick={() => setOpenMoreData(index)} className="underline block">See more</button>
                                         </div>
                                     </div>
@@ -238,7 +239,7 @@ export default function PackageOption({
                                                     <div className="w-full grid grid-cols-3 gap-[20px]">
                                                         <div>
                                                             <span className="font-semibold text-[14px]">Adult Price</span>
-                                                            <span className="block">{data.adultPrice}</span>
+                                                            <span className="block">{CurrencyConvert.formatAsThb(data.adultPrice)}</span>
                                                         </div>
                                                         <div>
                                                             <span className="font-semibold text-[14px]">Adult age rate</span>
@@ -251,7 +252,7 @@ export default function PackageOption({
                                                         </div>
                                                         <div>
                                                             <span className="font-semibold text-[14px]">Child Price</span>
-                                                            <span className="block">{data.childPrice}</span>
+                                                            <span className="block">{CurrencyConvert.formatAsThb(data.childPrice)}</span>
                                                         </div>
                                                         <div>
                                                             <span className="font-semibold text-[14px]">Child age rate</span>
@@ -262,7 +263,7 @@ export default function PackageOption({
                                                     <div className="w-full grid grid-cols-3 gap-[20px]">
                                                         <div>
                                                             <span className="font-semibold text-[14px]">Group Price</span>
-                                                            <span className="block">{data.groupPrice}</span>
+                                                            <span className="block">{CurrencyConvert.formatAsThb(data.groupPrice)}</span>
                                                         </div>
                                                         <div>
                                                             <span className="font-semibold text-[14px]">Adult age rate</span>
