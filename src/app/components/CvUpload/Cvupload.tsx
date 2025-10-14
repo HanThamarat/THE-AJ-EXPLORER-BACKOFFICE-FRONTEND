@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import UploadIcon from "@/app/assets/images/svg/upload-cloud.svg";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { BASE64_CONVERTION } from "@/app/hook/baseCovert";
 
-interface FilePreview {
+export interface FilePreview {
   id: string;
   file: File;
   preview: string;
@@ -17,7 +17,7 @@ export interface CvUploadComponentPropsType {
     onChange?: (value: FilePreview[]) => void;
 }
 
-const CvUploadComponent: React.FC = ({
+const CvUploadComponent = ({
     value = [],
     qty = 1,
     label,
@@ -25,13 +25,13 @@ const CvUploadComponent: React.FC = ({
 }: CvUploadComponentPropsType) => {
     const [files, setFiles] = useState<FilePreview[]>(value);
     const [isDragging, setIsDragging] = useState(false);
+     const fileInputRef = useRef<HTMLInputElement>(null); 
 
     useEffect(() => { 
         onChange?.(files);
-    }, []);
+    }, [files]);
 
   const handleFiles = useCallback(async (filesAccepted: File) => {
-  
         const base64 = await BASE64_CONVERTION.toBase64(filesAccepted);
         const newFiles: FilePreview = {
             id: crypto.randomUUID(),
@@ -69,7 +69,7 @@ const CvUploadComponent: React.FC = ({
 
   return (
     <div className="w-full flex flex-col gap-[2px]">
-        { label && <span className="font-medium text-[12px]">{label}</span> }
+        { label && <span className="font-medium text-[12px]">{label} ({files.length}/{qty})</span> }
         <div className="w-full">
             {/* Drop Area */}
             <div
@@ -79,10 +79,10 @@ const CvUploadComponent: React.FC = ({
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={() => document.getElementById("fileInput")?.click()}
+                onClick={() => fileInputRef.current?.click()}
             >
                 <input
-                    id="fileInput"
+                    ref={fileInputRef}
                     type="file"
                     multiple
                     accept="image/*"

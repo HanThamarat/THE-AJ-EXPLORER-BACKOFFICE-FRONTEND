@@ -7,7 +7,7 @@ import DefaultSwitch from "@/app/components/switch/default-switch";
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "@/app/hook/appDispatch";
-import MapMarker, { MapMarkerPropsType } from "@/app/components/map/mapMarker";
+import MapMarker from "@/app/components/map/mapMarker";
 import DefaultSelector, { SelectorOptionTpye } from "@/app/components/select/default-selector";
 import DefaultInput from "@/app/components/input/default-input";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
@@ -22,8 +22,9 @@ import { districtEntity, subDistrictEntity } from "@/app/types/geolocation";
 import dynamic from "next/dynamic";
 import TableLoader from "@/app/components/loader/tableLoader";
 import PackagOtpSvg from "@/app/assets/images/svg/package_option_mockup.svg";
-import FileUploadState from "./components/uploadState";
 import FileMockup from "@/app/assets/images/svg/file_mocup.svg";
+import { useRouter } from "next/navigation";
+import DefaultOutlineButton from "@/app/components/button/outline-button";
 
 // components
 const AttractionList = dynamic(() => import("./components/atractionList"), {
@@ -45,15 +46,17 @@ const PackageOption = dynamic(() => import("./components/pakcageOption"), {
     loading: () => <TableLoader />,
     ssr: false,
 });
-
-// import AttractionList from "./components/atractionList";
-// import IncludeList from "./components/includeList";
+const FileUploadState = dynamic(() => import("./components/uploadState"), {
+    loading: () => <TableLoader />,
+    ssr: false,
+});
 
 
 
 export default function PacakageForm() {
 
     const dispatch = useAppDispatch();
+    const router = useRouter();
     const { pkgTypes } = useSelector(pkgTypeSelector);
     const { province } = useSelector(geolocationSelector);
     const isFachingPkgType = useRef(false);
@@ -68,10 +71,6 @@ export default function PacakageForm() {
     // storange
     const [districtStore, setDistrictStore] = useState<districtEntity[]>();
 
-    const [packageStatus, setPackageStatus] = useState<boolean>(true);
-    const [departPoint, setDeparturePoint] = useState<{ lat: number, lgn: number } | null>(null);
-    const [endPoint, setEndPoint] = useState<{ lat: number, lgn: number } | null>(null);
-
     const {
         register,
         handleSubmit,
@@ -80,23 +79,13 @@ export default function PacakageForm() {
         formState: { errors }
     } = useForm<PackageDTO>({ resolver: zodResolver(packageSchema) });
 
-    const handleDepartLocation = (e: MapMarkerPropsType) => {
-        setDeparturePoint({
-            lat: e.lat,
-            lgn: e.lng
-        });
-    }
-
-    const handleEndLocation = (e: MapMarkerPropsType) => {
-        setEndPoint({
-            lat: e.lat,
-            lgn: e.lng
-        });
-    }
-
     const onSubmit: SubmitHandler<PackageDTO> = async (data) => {
         console.log(data);
     }
+
+    const onInvalid = (errors: any) => {
+    console.log("❌ Validation errors:", errors);
+    };
 
     useEffect(() => {
         const getProvinces = async () => {
@@ -162,7 +151,7 @@ export default function PacakageForm() {
 
     return(
         <>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="w-full">
             <div className="mt-[20px]">
                 <span className="text-[18px] font-medium">Create New Package</span>
                 <span className="block text-gray-600">Please enter form below for create your package.</span>
@@ -170,7 +159,17 @@ export default function PacakageForm() {
             <div className="w-full p-[20px] bg-white mt-[10px] rounded-[20px] flex justify-between gap-[10px]">
                 <div className="w-full">
                     <div className="flex items-start gap-3">
-                        <DefaultSwitch value={packageStatus} onChange={(e: boolean) => setPackageStatus(e)} />
+                        <Controller
+                            name="status"
+                            control={control}
+                            rules={{ required: "Package type is required" }}
+                            render={({ field }) => (
+                                <DefaultSwitch 
+                                    value={field.value} 
+                                    onChange={(e) => field.onChange(Boolean(e))} 
+                                />
+                            )}
+                        />
                         <div>
                             <span className="font-semibold">Active the package</span>
                             <p className="text-gray-700">The active status indicates that the package is currently available.</p>
@@ -267,10 +266,30 @@ export default function PacakageForm() {
                         <p className="text-gray-500 mb-[5px]">Mark departure point and end point.</p>
                         <div className="border border-gray-200 rounded-[10px] p-[10px]">
                             <span className="mb-[2px]">Departure point *</span>
-                            <MapMarker onDrang={handleDepartLocation} />
+                            <Controller
+                                name="depart_point"
+                                control={control}
+                                render={({ field }) => (
+                                    <MapMarker 
+                                        value={field.value}
+                                        onChange={field.onChange} 
+                                    />
+                                )}
+                            />
+                            {errors.depart_point && (<span className="text-red-500">{errors.depart_point.message}</span>)}
                             <div className="h-[20px]"></div>
                             <span className="mb-[2px]">End point *</span>
-                            <MapMarker onDrang={handleEndLocation} />
+                            <Controller
+                                name="end_point"
+                                control={control}
+                                render={({ field }) => (
+                                    <MapMarker 
+                                        value={field.value}
+                                        onChange={field.onChange} 
+                                    />
+                                )}
+                            />
+                            {errors.end_point && (<span className="text-red-500">{errors.end_point.message}</span>)}
                         </div>
                     </div>
                     <div className="my-[20px]">
@@ -316,7 +335,6 @@ export default function PacakageForm() {
                         />
                         { errors.packageAttraction && <span className='text-red-500'>{errors.packageAttraction.message}</span> }
                     </div>
-                    <DefaultButton label="Test" type="submit"/>
                 </div>
                 <div className="w-[40%] flex justify-center items-center">
                    <div>
@@ -411,7 +429,32 @@ export default function PacakageForm() {
             </div>
             <div className="w-full p-[20px] bg-white mt-[10px] rounded-[20px] flex justify-between gap-[10px]">
                 <div className="w-full">
-                    <FileUploadState />
+                    <Controller
+                        control={control}
+                        name="packageImage"
+                        render={({ field }) => (
+                            <FileUploadState
+                                value={field.value}
+                                onChange={field.onChange}                            
+                            />
+                        )}
+                    />
+                    { errors.packageImage && <span className='text-red-500'>{errors.packageImage.message}</span> }
+                    <div className="flex justify-end mt-[30px] gap-[10px]">
+                        <div className="w-[20%]">
+                            <DefaultOutlineButton
+                                type="button"
+                                label="Cancel"
+                                onClick={() => router.back()}
+                            />
+                        </div>
+                        <div className="w-[35%]">
+                            <DefaultButton
+                                label="Add new package"
+                                type="submit"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <div className="w-[40%] flex justify-center items-center">
                    <div>
