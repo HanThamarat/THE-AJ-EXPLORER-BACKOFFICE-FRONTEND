@@ -11,7 +11,7 @@ import MapMarker from "@/app/components/map/mapMarker";
 import DefaultSelector, { SelectorOptionTpye } from "@/app/components/select/default-selector";
 import DefaultInput from "@/app/components/input/default-input";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import { PackageDTO, packageSchema } from "@/app/types/package";
+import { packageBackDTO, PackageDTO, packageSchema } from "@/app/types/package";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DefaultButton from "@/app/components/button/default-button";
 import { getAllPkgType } from "@/app/store/slice/pkgTypeManangementSlice";
@@ -25,6 +25,9 @@ import PackagOtpSvg from "@/app/assets/images/svg/package_option_mockup.svg";
 import FileMockup from "@/app/assets/images/svg/file_mocup.svg";
 import { useRouter } from "next/navigation";
 import DefaultOutlineButton from "@/app/components/button/outline-button";
+import { ConfirmModal } from "@/app/components/modal/default-modal";
+import { createPacakage } from "@/app/store/slice/packageManagement";
+import notify from '@/app/components/alert/toastify';
 
 // components
 const AttractionList = dynamic(() => import("./components/atractionList"), {
@@ -67,6 +70,8 @@ export default function PacakageForm() {
     const [provinceOption, setProvinceOption] = useState<SelectorOptionTpye[]>();
     const [districtOption, setDistrictOption] = useState<SelectorOptionTpye[]>();
     const [subdistrictOption, setSubdistrictOptionOption] = useState<SelectorOptionTpye[] | undefined>();
+    const [packageData, setPackageData] = useState<packageBackDTO | null>(null);
+    const [comfirmModalIsOpen, setComfirmModalIsOpen] = useState<boolean>(false);
 
     // storange
     const [districtStore, setDistrictStore] = useState<districtEntity[]>();
@@ -80,11 +85,55 @@ export default function PacakageForm() {
     } = useForm<PackageDTO>({ resolver: zodResolver(packageSchema) });
 
     const onSubmit: SubmitHandler<PackageDTO> = async (data) => {
-        console.log(data);
+        const packageFormat: packageBackDTO = {
+            packageName: data.packageName,
+            packageTypeId: data.packageTypeId,
+            description: data.description,
+            additional_description: data.additional_description,
+            provinceId: data.provinceId,
+            districtId: data.districtId,
+            subDistrictId: data.subDistrictId,
+            depart_point_lat: data.depart_point.lat.toString(),
+            depart_point_lon: data.depart_point.lng.toString(),
+            end_point_lat: data.end_point.lat.toString(),
+            end_point_lon: data.end_point.lng.toString(),
+            benefit_include: data.benefit_include,
+            benefit_not_include: data.benefit_not_include,
+            status: data.status,
+            packageImage: data.packageImage,
+            packageOption: data.packageOption,
+            attraction: data.packageAttraction
+        } 
+        setPackageData(packageFormat);
+        setComfirmModalIsOpen(true);
+    }
+
+    const hadleConfirmCreate = async () => {
+        try {
+            const response: any = await dispatch(createPacakage(packageData));
+
+            if (response.payload.status) {
+                await setComfirmModalIsOpen(false);
+                await reset();
+                notify({
+                    label:"Createing a package successfully!",
+                    type: 'success'
+                });
+                router.push('/cms/package');
+            } else {
+                throw response?.payload?.error ?  response?.payload?.error : "Createing package something wrong."
+            }
+        } catch (error: any) {
+            await setComfirmModalIsOpen(false);
+            notify({
+                label: error,
+                type: 'error'
+            });
+        }
     }
 
     const onInvalid = (errors: any) => {
-    console.log("❌ Validation errors:", errors);
+        console.log("❌ Validation errors:", errors);
     };
 
     useEffect(() => {
@@ -151,6 +200,13 @@ export default function PacakageForm() {
 
     return(
         <>
+        <ConfirmModal
+            title="Do you want to Create Package ?"
+            description="Confirm to proceed with Creation this package."
+            open={comfirmModalIsOpen}
+            cancalFunc={() => setComfirmModalIsOpen(false)}
+            confirmFunc={hadleConfirmCreate}
+        />
         <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="w-full">
             <div className="mt-[20px]">
                 <span className="text-[18px] font-medium">Create New Package</span>
@@ -165,7 +221,7 @@ export default function PacakageForm() {
                             rules={{ required: "Package type is required" }}
                             render={({ field }) => (
                                 <DefaultSwitch 
-                                    value={field.value} 
+                                    value={field.value ?? true}
                                     onChange={(e) => field.onChange(Boolean(e))} 
                                 />
                             )}

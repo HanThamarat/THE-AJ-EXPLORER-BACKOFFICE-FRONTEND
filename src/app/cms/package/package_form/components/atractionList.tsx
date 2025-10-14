@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Dropdown } from "antd";
 import type { MenuProps } from "antd";
 import { IoIosMore } from "react-icons/io";
+import dateFormat from "dateformat";
 
 interface AttractionListProps {
   value?: PackageAttractionDTO[];
@@ -34,9 +35,17 @@ export default function AttractionList({
   }, [attractionArr]);
 
   const handlerAttraction = () => {
+    const timeString = attractionTime;
+    const [hours, minutes, sec] = timeString.split(":").map(Number);
+
+    const dateTime = new Date();
+    dateTime.setHours(hours);
+    dateTime.setMinutes(minutes);
+    dateTime.setSeconds(sec);
+
     const newAttraction: PackageAttractionDTO = {
       attractionName: attractionName,
-      attractionTime: attractionTime,
+      attractionTime: dateTime.toISOString(),
       description: "",
       status: true,
     };
@@ -152,7 +161,7 @@ export default function AttractionList({
                     />
                     <div className="flex gap-[12px] items-center">
                       <Image src={globeSvg} alt="" />
-                      <span>{data.attractionTime.toString()}</span>
+                      <span>{dateFormat(data.attractionTime, "shortTime")}</span>
                     </div>
                     <div className="flex gap-[12px] items-center">
                       <Image src={luggage} alt="" />
