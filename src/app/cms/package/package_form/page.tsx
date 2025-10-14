@@ -22,6 +22,8 @@ import { districtEntity, subDistrictEntity } from "@/app/types/geolocation";
 import dynamic from "next/dynamic";
 import TableLoader from "@/app/components/loader/tableLoader";
 import PackagOtpSvg from "@/app/assets/images/svg/package_option_mockup.svg";
+import FileUploadState from "./components/uploadState";
+import FileMockup from "@/app/assets/images/svg/file_mocup.svg";
 
 // components
 const AttractionList = dynamic(() => import("./components/atractionList"), {
@@ -375,7 +377,7 @@ export default function PacakageForm() {
             {/* package option components */}
             <div className="mt-[30px]">
                 <span className="text-[18px] font-medium">Add package option</span>
-                <span className="block text-gray-600">Please enter form below for create package option..</span>
+                <span className="block text-gray-600">Please enter form below for create package option.</span>
             </div>
             <div className="w-full p-[20px] bg-white mt-[10px] rounded-[20px] flex justify-between gap-[10px]">
                 <div className="w-full">
@@ -398,6 +400,26 @@ export default function PacakageForm() {
                         </div>
                         <div className="justify-center flex w-full">
                             <span className="text-center w-full">Add new for give choices to customer choose</span>
+                        </div>
+                   </div>
+                </div>
+            </div>
+            {/* package file upload components */}
+            <div className="mt-[30px]">
+                <span className="text-[18px] font-medium">Add images to your package</span>
+                <span className="block text-gray-600">Please upload images about this package.</span>
+            </div>
+            <div className="w-full p-[20px] bg-white mt-[10px] rounded-[20px] flex justify-between gap-[10px]">
+                <div className="w-full">
+                    <FileUploadState />
+                </div>
+                <div className="w-[40%] flex justify-center items-center">
+                   <div>
+                        <div className="justify-center items-center flex w-full">
+                            <Image src={FileMockup} alt="" />
+                        </div>
+                        <div className="justify-center flex w-full">
+                            <span className="text-center w-full">Upload images to customer see & interesting your package</span>
                         </div>
                    </div>
                 </div>
