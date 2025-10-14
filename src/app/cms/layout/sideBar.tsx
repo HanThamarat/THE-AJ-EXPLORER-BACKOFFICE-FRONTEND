@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { ChevronDown, ChevronRight, Settings, Users } from "lucide-react";
 import { MenuItem } from "@/app/types/menu";
 import { useRouter, usePathname } from "next/navigation";
+import { menu } from "@/app/config/menuConfig";
 
 import Luggage from "@/app/assets/images/svg/luggage.svg";
 import dashboard from "@/app/assets/images/svg/bar-chart-square.svg";
@@ -56,34 +57,6 @@ export default function SideBar() {
     setOpenMenu(openMenu === label ? null : label);
   };
 
-  const menu: MenuItem[] = [
-    { label: "Dashboard", icon: <Image src={dashboard} alt="" />, path: "/cms/dashboard" },
-    {
-      label: "Package",
-      icon: <Image src={Luggage} alt="" />,
-      subItems: [
-        { label: "Package", path: "/cms/package" },
-        { label: "Package Promotion", path: "/cms/package-promotion" },
-        { label: "Package Type", path: "/cms/package/package_type" },
-      ],
-    },
-    {
-      label: "User Management",
-      icon: <Users />,
-      subItems: [
-        { label: "All Users", path: "/cms/usermanagement" },
-        { label: "Add User", path: "/cms/usermanagement/add" },
-      ],
-    },
-    {
-      label: "Settings",
-      icon: <Settings />,
-      subItems: [
-        { label: "General", path: "/settings/general" },
-        { label: "Profile", path: "/settings/profile" },
-      ],
-    },
-  ];
 
   const isActive = (item: MenuItem) => {
     if (item.path && activePath === item.path) return true;
@@ -94,8 +67,8 @@ export default function SideBar() {
   return (
     <div
       className={`h-screen ${
-        isOpen ? "w-[278px]" : "w-[70px]"
-      } bg-white transition-all duration-300`}
+        isOpen ? "xl:w-[278px]" : "w-[70px]"
+      } w-[70px] bg-white transition-all duration-300`}
     >
       {/* Header */}
       <div
@@ -103,12 +76,12 @@ export default function SideBar() {
           isOpen ? "justify-between" : "justify-center"
         } items-center`}
       >
-        {isOpen && <Image src={Logo} width={140} alt="Logo" />}
+        {isOpen && <Image src={Logo} width={140} className="hidden xl:block" alt="Logo" />}
         <button onClick={handleToggleSidebar}>
           <FiAlignJustify className="text-primary text-[24px]" />
         </button>
       </div>
-      <ul className={`space-y-2 ${isOpen ? "px-[20px]" : "px-[5px]"} mt-[20px]`}>
+      <ul className={`space-y-2 ${isOpen ? "xl:px-[20px]" : "px-[5px]"} px-[5px] mt-[20px]`}>
         {menu.map((item) => (
           <li key={item.label}>
             {/* Main menu item */}
@@ -118,23 +91,25 @@ export default function SideBar() {
                   ? toggleSubmenu(item.label)
                   : handleNavigate(item.path || "")
               }
-              className={`flex items-center ${
-                isOpen ? "justify-between" : "justify-center"
+              className={`flex items-center justify-center ${
+                isOpen ? "xl:justify-between" : "justify-center"
               } w-full px-3 py-2 rounded-lg ${
                 isActive(item) ? "bg-[#F5F5F5]" : "hover:bg-[#F5F5F5]"
               }`}
             >
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-0 xl:space-x-2">
                 {item.icon}
-                {isOpen && <span>{item.label}</span>}
+                {isOpen && <span className="hidden xl:block">{item.label}</span>}
               </div>
-              {item.subItems && isOpen && (
-                openMenu === item.label ? (
-                  <ChevronDown size={18} />
-                ) : (
-                  <ChevronRight size={18} />
-                )
-              )}
+              <div className="hidden xl:block">
+                {item.subItems && isOpen && (
+                  openMenu === item.label ? (
+                    <ChevronDown size={18} />
+                  ) : (
+                    <ChevronRight size={18} />
+                  )
+                )}
+              </div>
             </button>
             {item.subItems && openMenu === item.label && (
               <ul className="mt-2 space-y-1 bg-[#F5F5F5] rounded-[10px] p-[5px]">

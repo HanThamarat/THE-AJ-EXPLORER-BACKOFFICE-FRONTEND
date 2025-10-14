@@ -392,7 +392,7 @@ export default function PacakageForm() {
                         { errors.packageAttraction && <span className='text-red-500'>{errors.packageAttraction.message}</span> }
                     </div>
                 </div>
-                <div className="w-[40%] flex justify-center items-center">
+                <div className="xl:w-[40%] hidden xl:flex justify-center items-center">
                    <div>
                         <div className="justify-center items-center flex w-full">
                             <Image src={Mockup} alt="" />
@@ -437,7 +437,7 @@ export default function PacakageForm() {
                         { errors.benefit_include && <span className='text-red-500'>{errors.benefit_include.message}</span> }
                     </div>
                 </div>
-                <div className="w-[40%] flex justify-center items-center">
+                <div className="xl:w-[40%] hidden xl:flex justify-center items-center">
                    <div>
                         <div className="justify-center items-center flex w-full">
                             <Image src={BenefitMockup} alt="" />
@@ -467,7 +467,7 @@ export default function PacakageForm() {
                     />
                     { errors.packageOption && <span className='text-red-500'>{errors.packageOption.message}</span> }
                 </div>
-                <div className="w-[40%] flex justify-center items-center">
+                <div className="xl:w-[40%] hidden xl:flex justify-center items-center">
                    <div>
                         <div className="justify-center items-center flex w-full">
                             <Image src={PackagOtpSvg} alt="" />
@@ -512,7 +512,7 @@ export default function PacakageForm() {
                         </div>
                     </div>
                 </div>
-                <div className="w-[40%] flex justify-center items-center">
+                <div className="xl:w-[40%] hidden xl:flex justify-center items-center">
                    <div>
                         <div className="justify-center items-center flex w-full">
                             <Image src={FileMockup} alt="" />
