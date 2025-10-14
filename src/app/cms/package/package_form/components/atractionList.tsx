@@ -5,7 +5,7 @@ import TimePickerComponent from "@/app/components/datePIcker/timePicker";
 import DefaultOutlineButton from "@/app/components/button/outline-button";
 import { LuPlus } from "react-icons/lu";
 import { useState, useEffect } from "react";
-import { packageAttractionEntity } from "@/app/types/package";
+import { PackageAttractionDTO } from "@/app/types/package";
 import DefaultSwitch from "@/app/components/switch/default-switch";
 import globeSvg from "@/app/assets/images/svg/globe-05.svg";
 import luggage from "@/app/assets/images/svg/luggage.svg";
@@ -15,8 +15,8 @@ import type { MenuProps } from "antd";
 import { IoIosMore } from "react-icons/io";
 
 interface AttractionListProps {
-  value?: packageAttractionEntity[];
-  onChange?: (value: packageAttractionEntity[]) => void;
+  value?: PackageAttractionDTO[];
+  onChange?: (value: PackageAttractionDTO[]) => void;
 }
 
 export default function AttractionList({ 
@@ -25,7 +25,7 @@ export default function AttractionList({
  }: AttractionListProps) {
   const [attractionName, setAttractionName] = useState<string>("");
   const [attractionTime, setAttractionTime] = useState<string>("");
-  const [attractionArr, setAttractionArr] = useState<packageAttractionEntity[]>(value);
+  const [attractionArr, setAttractionArr] = useState<PackageAttractionDTO[]>(value);
 
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
@@ -34,9 +34,10 @@ export default function AttractionList({
   }, [attractionArr]);
 
   const handlerAttraction = () => {
-    const newAttraction: packageAttractionEntity = {
+    const newAttraction: PackageAttractionDTO = {
       attractionName: attractionName,
       attractionTime: attractionTime,
+      description: "",
       status: true,
     };
 
