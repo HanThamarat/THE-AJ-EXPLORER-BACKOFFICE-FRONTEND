@@ -177,3 +177,56 @@ export interface packageTypeDataTable {
     updated_by:     string;
     updated_at:     Date | string;
 }
+
+export interface packageBackDTO {
+    packageName:                string;
+    packageTypeId:              number;
+    description?:               string;
+    additional_description?:    string;
+    provinceId:                 number;
+    districtId:                 number;
+    subDistrictId:              number;
+    depart_point_lon:           string;
+    depart_point_lat:           string;
+    end_point_lon:              string;
+    end_point_lat:              string;
+    benefit_include:            packageInclude[];
+    benefit_not_include:        packageNotInclude[];
+    status:                     boolean;
+    packageImage:               packageImageDTO[];
+    packageOption:              packageOptionDTO[];
+    attraction:                 packageAttractionDTO[];
+    created_by?:                number;
+    updated_by?:                number;
+}
+
+export interface packageAttractionDTO {
+    packageId?:         number;
+    attractionName:     string;
+    attractionTime:     string;
+    description?:       string | null;
+    status:             boolean;
+}
+
+export interface packageOptionDTO {
+    packageId?:         number;
+    pkgOptionTypeId:    number;
+    name:               string;
+    description:        string;
+    adultFromAge?:      string;
+    adultToAge?:        string;
+    childFromAge?:      string;
+    childToAge?:        string;
+    groupFromAge?:      string;
+    groupToAge?:        string;
+    adultPrice?:        number;
+    childPrice?:        number;
+    groupPrice?:        number;
+}
+
+export interface packageImageDTO {
+    id?:                string;
+    base64:             string;
+    fileName:           string;
+    mainFile:          boolean;               
+}

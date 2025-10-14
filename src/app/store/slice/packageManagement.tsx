@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { AxiosInstance } from "@/app/hook/axiosInstance";
-import { PackageDTO, packageEntity } from "@/app/types/package";
+import { packageBackDTO, packageEntity } from "@/app/types/package";
 
 
 
@@ -15,7 +15,7 @@ export const getAllPacakges = createAsyncThunk('packageManagement/getAllPacakges
     }
 });
 
-export const createPacakage = createAsyncThunk('packageManagement/createPacakage', async(data: PackageDTO) => {
+export const createPacakage = createAsyncThunk('packageManagement/createPacakage', async(data: packageBackDTO | null) => {
     try {
         const response = await AxiosInstance.post('/packagemanagement/package', data);
 
