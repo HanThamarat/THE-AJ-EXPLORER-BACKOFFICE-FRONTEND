@@ -17,7 +17,7 @@ export const menu: MenuItem[] = [
     icon: <Image src={Luggage} alt="" />,
     subItems: [
       { label: "Package", path: "/cms/package" },
-      { label: "Package Promotion", path: "/cms/package-promotion" },
+      { label: "Package Promotion", path: "/cms/package/package-promotion" },
       { label: "Package Type", path: "/cms/package/package_type" },
     ],
   },

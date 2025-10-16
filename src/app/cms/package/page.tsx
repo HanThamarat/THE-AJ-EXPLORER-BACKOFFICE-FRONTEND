@@ -108,7 +108,7 @@ export default function UserOverview() {
                 lastupdated: new Date(data.updated_at),
                 updated_by: data.updated_by
             })) : [];
-            setPackageData(pkgsFormat);         
+            setPackageData(pkgsFormat);
         }
     }, [dispatch, packages]);
 
