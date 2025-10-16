@@ -76,7 +76,7 @@ export default function PromotionForm() {
                 status: promotion.status as boolean,
                 packagePromoLink: promotion.packagePromoLink
                     ? promotion.packagePromoLink.map((data) => ({
-                        packageLink: data.id,
+                        packageLink: data.pakcageId,
                         percentage: data.percentage,
                     }))
                     : [],
