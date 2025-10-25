@@ -10,9 +10,6 @@ import { MenuItem } from "@/app/types/menu";
 import { useRouter, usePathname } from "next/navigation";
 import { menu } from "@/app/config/menuConfig";
 
-import Luggage from "@/app/assets/images/svg/luggage.svg";
-import dashboard from "@/app/assets/images/svg/bar-chart-square.svg";
-
 export default function SideBar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -93,7 +90,7 @@ export default function SideBar() {
               }
               className={`flex items-center justify-center ${
                 isOpen ? "xl:justify-between" : "justify-center"
-              } w-full px-3 py-2 rounded-lg ${
+              } w-full px-3 py-2 rounded-lg duration-100 ease-in-out ${
                 isActive(item) ? "bg-[#F5F5F5]" : "hover:bg-[#F5F5F5]"
               }`}
             >
@@ -117,7 +114,7 @@ export default function SideBar() {
                   <li key={sub.label}>
                     <button
                       onClick={() => handleNavigate(sub.path)}
-                      className={`block w-full px-3 text-left py-[8px] rounded-md text-sm ${
+                      className={`block w-full px-3 text-left py-[8px] duration-100 ease-in-out rounded-md text-sm ${
                         activePath === sub.path
                           ? "bg-[#FFFFFF] text-black"
                           : "text-black hover:bg-[#FFFFFF]"
