@@ -5,18 +5,20 @@ import {
   Map,
   Marker,
   useMarkerRef,
-  useMap
+  useMap // This hook must be used *inside* a child of APIProvider
 } from "@vis.gl/react-google-maps";
 import { useEffect, useState } from "react";
 import { PointDTO } from "@/app/types/package";
 
+// Define props for both components
 interface MapMarkerProps {
   value: PointDTO;
   onChange: (val: PointDTO) => void;
 }
 
-export default function MapMarker({ value, onChange }: MapMarkerProps) {
-  const map = useMap();
+function MapContent({ value, onChange }: MapMarkerProps) {
+  // This hook will now find the context
+  const map = useMap(); 
   const [markerPosition, setMarkerPosition] = useState<PointDTO | null>(value);
   const [markerRef, marker] = useMarkerRef();
 
@@ -39,7 +41,8 @@ export default function MapMarker({ value, onChange }: MapMarkerProps) {
           };
           setMarkerPosition(coords);
           onChange(coords);
-          map?.panTo(coords);
+          // Now `map` will be defined and this will work
+          map?.panTo(coords); 
         },
         (err) => {
           console.log("Geolocation error:", err);
@@ -55,26 +58,32 @@ export default function MapMarker({ value, onChange }: MapMarkerProps) {
   }, [value]);
 
   return (
+    <Map
+      className="w-full h-[300px] overflow-hidden rounded-[15px]"
+      center={markerPosition ?? { lat: 13.736717, lng: 100.523186 }}
+      gestureHandling="greedy"
+      defaultZoom={8}
+      disableDefaultUI
+    >
+      {markerPosition && (
+        <Marker
+          ref={markerRef}
+          position={markerPosition}
+          draggable={true}
+          onDrag={handleChangeLocation}
+          icon={{
+            url: "/marker.svg"
+          }}
+        />
+      )}
+    </Map>
+  );
+}
+
+export default function MapMarker({ value, onChange }: MapMarkerProps) {
+  return (
     <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY as string}>
-      <Map
-        className="w-full h-[300px] overflow-hidden rounded-[15px]"
-        center={markerPosition ?? { lat: 13.736717, lng: 100.523186 }} // fallback to Bangkok
-        gestureHandling="greedy"
-        defaultZoom={8}
-        disableDefaultUI
-      >
-        {markerPosition && (
-          <Marker
-            ref={markerRef}
-            position={markerPosition}
-            draggable={true}
-            onDrag={handleChangeLocation}
-            icon={{
-              url: "/marker.svg"
-            }}
-          />
-        )}
-      </Map>
+      <MapContent value={value} onChange={onChange} />
     </APIProvider>
   );
 }
