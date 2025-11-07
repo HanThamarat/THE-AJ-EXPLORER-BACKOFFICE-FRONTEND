@@ -5,7 +5,7 @@ import Logo from "@/app/assets/images/svg/logo.svg";
 import { FiAlignJustify } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { ChevronDown, ChevronRight, Settings, Users } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { MenuItem } from "@/app/types/menu";
 import { useRouter, usePathname } from "next/navigation";
 import { menu } from "@/app/config/menuConfig";
@@ -26,16 +26,10 @@ export default function SideBar() {
     }
   }, []);
 
-  // Update activePath whenever url changes
+  // Update active path only (no auto-expand submenu)
   useEffect(() => {
     if (pathname) {
       setActivePath(pathname);
-
-      // Auto expand submenu if current path belongs to one
-      const parent = menu.find(
-        (item) => item.subItems?.some((sub) => sub.path === pathname)
-      );
-      if (parent) setOpenMenu(parent.label);
     }
   }, [pathname]);
 
@@ -54,13 +48,12 @@ export default function SideBar() {
     setOpenMenu(openMenu === label ? null : label);
   };
 
-
   const isActive = (item: MenuItem) => {
-    if (item.path && activePath === item.path) return true;
-    if (item.subItems?.some((sub) => sub.path === activePath)) return true;
+    if (item.path && activePath.startsWith(item.path)) return true;
+    if (item.subItems?.some((sub) => activePath.startsWith(sub.path))) return true;
     return false;
   };
-
+  
   return (
     <div
       className={`h-screen ${
@@ -78,6 +71,8 @@ export default function SideBar() {
           <FiAlignJustify className="text-primary text-[24px]" />
         </button>
       </div>
+
+      {/* Menu List */}
       <ul className={`space-y-2 ${isOpen ? "xl:px-[20px]" : "px-[5px]"} px-[5px] mt-[20px]`}>
         {menu.map((item) => (
           <li key={item.label}>
@@ -108,6 +103,8 @@ export default function SideBar() {
                 )}
               </div>
             </button>
+
+            {/* Submenu */}
             {item.subItems && openMenu === item.label && (
               <ul className="mt-2 space-y-1 bg-[#F5F5F5] rounded-[10px] p-[5px]">
                 {item.subItems.map((sub) => (

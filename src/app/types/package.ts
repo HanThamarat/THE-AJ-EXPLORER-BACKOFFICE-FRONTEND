@@ -119,8 +119,14 @@ export interface packageOptionEntity {
     adultPrice?:        number;
     childPrice?:        number;
     groupPrice?:        number;
-    created_at?:         Date;
-    updated_at?:         Date;
+    adultFromAge?:      string;
+    adultToAge?:        string;
+    childFromAge?:      string;
+    childToAge?:        string;
+    groupFromAge?:      string;
+    groupToAge?:        string;
+    created_at?:        Date;
+    updated_at?:        Date;
 }
 
 export interface packageImageSave {
@@ -128,7 +134,7 @@ export interface packageImageSave {
     file_original_name: string;
     file_path:          string;
     mainFile:           boolean;
-    base64?:            string | null;
+    file_base64?:       string | null;
 }
 
 export interface packageNotInclude {

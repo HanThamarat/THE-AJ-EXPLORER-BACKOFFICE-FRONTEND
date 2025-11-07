@@ -25,14 +25,26 @@ export const createPacakage = createAsyncThunk('packageManagement/createPacakage
     }
 });
 
+export const getPackagebyId = createAsyncThunk('packageManagement/getPackagebyId', async (id: number) => {
+    try {
+        const response = await AxiosInstance.get(`/packagemanagement/package/${id}`);
+
+        return { status: true, data: response.data.body };
+    } catch (error: any) {
+        return { status: false, error: error?.response.data.error };
+    }
+})
+
 interface packageType {
     packages: packageEntity[] | [] | null;
+    packageByid: packageEntity | null;
     loading: boolean;
     error: unknown;
 }
 
 const initialState: packageType = {
     packages: null,
+    packageByid: null,
     loading: false,
     error: null
 }
@@ -60,6 +72,8 @@ const packageSlice = createSlice({
                         ...state?.packages ? state.packages : [],
                         action.payload.data as packageEntity
                     ];
+                } else if (action.type.includes('getPackagebyId')) {
+                    state.packageByid = action.payload.data as packageEntity;
                 }
             }
         )

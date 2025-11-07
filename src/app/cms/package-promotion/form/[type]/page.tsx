@@ -126,7 +126,7 @@ export default function PromotionForm() {
                     label: pageType === 'promotion' ? (promo_id ? "Updating a package promotion successfully!" : "Createing a package promotion successfully!") : (promo_id ? "Updating a package coupon successfully!" : "Createing a package coupon successfully!"),
                     type: 'success'
                 });
-                router.push('/cms/package/package-promotion');
+                router.push('/cms/package-promotion');
             } else {
                 throw response?.payload?.error ?  response?.payload?.error :  "Updating something wrong.";
             }
