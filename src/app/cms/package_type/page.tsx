@@ -12,7 +12,6 @@ import DefaultEmpty from "@/app/components/empty/default-emtpy";
 import { packageTypeDataTable, packageTypeEntity } from "@/app/types/package";
 import { ColumnDef } from "@tanstack/react-table";
 import dateFormat from "dateformat";
-import { IoEyeOutline } from "react-icons/io5";
 import DelPkgTypeModal from "./modal/delPkgTypeModal";
 
 

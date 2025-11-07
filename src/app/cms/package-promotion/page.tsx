@@ -131,12 +131,12 @@ export default function PackagePromoPage() {
                      <DefaultButton
                         label="Create New Coupon"
                         icon={<FiPlus className="text-white text-[16px]" />}
-                        onClick={() => router.push("/cms/package/package-promotion/form/coupon")}
+                        onClick={() => router.push("/cms/package-promotion/form/coupon")}
                     />
                     <DefaultButton
                         label="Create New Promotion"
                         icon={<FiPlus className="text-white text-[16px]" />}
-                        onClick={() => router.push("/cms/package/package-promotion/form/promotion")}
+                        onClick={() => router.push("/cms/package-promotion/form/promotion")}
                     />
                 </div>
             </div>
