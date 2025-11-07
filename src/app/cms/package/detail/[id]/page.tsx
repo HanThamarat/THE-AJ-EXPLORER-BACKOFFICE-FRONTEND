@@ -14,6 +14,9 @@ import ImageLoader from "@/app/components/loader/image-loader";
 import { convert } from "html-to-text";
 import TableLoader from "@/app/components/loader/tableLoader";
 import PackageOptionDetailComponent from "./components/packageOption";
+import TimelineComponent from "./components/timeline";
+import BenefitComponent from "./components/benifit";
+import LocationComponent from "./components/location";
 
 export default function PackageDetail() {
 
@@ -73,6 +76,30 @@ export default function PackageDetail() {
                             :
                             <TableLoader />
                         }
+                        <div className="mt-[24px]">
+                            {
+                                packageByid !== null && !isLoading ?
+                                <BenefitComponent benefit={packageByid.benefit_include} not_benefit={packageByid.benefit_not_include} />
+                                :
+                                <TableLoader />
+                            }
+                        </div>
+                        <div className="mt-[24px]">
+                            {
+                                packageByid !== null && !isLoading ?
+                                <TimelineComponent packageAttractions={packageByid.pakcageAttraction} />
+                                :
+                                <TableLoader />
+                            }
+                        </div>
+                        <div className="mt-[24px]">
+                            {
+                                packageByid !== null && !isLoading ?
+                                <LocationComponent packageDetail={packageByid} />
+                                :
+                                <TableLoader />
+                            }
+                        </div>
                     </div>
                     <div className="w-[30%]">
                         {
