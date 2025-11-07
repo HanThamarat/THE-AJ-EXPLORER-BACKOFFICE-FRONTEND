@@ -49,11 +49,11 @@ export default function SideBar() {
   };
 
   const isActive = (item: MenuItem) => {
-    if (item.path && activePath === item.path) return true;
-    if (item.subItems?.some((sub) => sub.path === activePath)) return true;
+    if (item.path && activePath.startsWith(item.path)) return true;
+    if (item.subItems?.some((sub) => activePath.startsWith(sub.path))) return true;
     return false;
   };
-
+  
   return (
     <div
       className={`h-screen ${
