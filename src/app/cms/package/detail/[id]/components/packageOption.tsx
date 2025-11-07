@@ -55,7 +55,7 @@ export default function PackageOptionDetailComponent ({
             {
                 packageOptions?.length !== 1 && (
                     packageOptions?.map((data, key) => (
-                        <div key={key} onClick={() => setActivePkgOption(key)} className={`${activePkgOption === key ? 'border-[#613DC1] bg-[#613DC1]/5' : 'border-gray-200 bg-transparent' } min-w-[180px] p-[10px] rounded-[5px] border cursor-pointer`}>
+                        <div key={key} onClick={() => setActivePkgOption(key)} className={`${activePkgOption === key ? 'border-[#613DC1] bg-[#613DC1]/5' : 'border-gray-200 bg-transparent' } transition-all duration-100 ease-in-out min-w-[180px] p-[10px] rounded-[5px] border cursor-pointer`}>
                             <span className={`${ activePkgOption === key ? 'text-[#613DC1]' : 'text-gray-700' } font-semibold text-[14px]`}>{data.name}</span>
                         </div>
                     ))
@@ -169,7 +169,7 @@ export default function PackageOptionDetailComponent ({
                 </div>
             }
             <div className="mt-[24px]">
-                <span className="text-[16px]">Total </span>
+                <span className="text-[14px]">Total </span>
                 <span className="text-[18px] font-medium">THB {amoutPrice}</span>
             </div>
         </div>
