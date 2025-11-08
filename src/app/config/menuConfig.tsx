@@ -44,11 +44,11 @@ export const menu: MenuItem[] = [
   {
     label: "Blog",
     icon: <Image src={compass} alt="" />,
-    path: "/cms/dashboard",
+    path: "/cms/blog",
   },
   {
     label: "Contact us",
     icon: <Image src={inbox} alt="" />,
-    path: "/cms/dashboard",
+    path: "/cms/contact",
   }
 ];
