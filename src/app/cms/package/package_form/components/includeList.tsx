@@ -19,7 +19,7 @@ export default function IncludeList({
 
     const [whatInclude, setWhatInclude] = useState<string>("");
     const [editIndex, setEditindex] = useState<number | null>(null);
-    const [whatIncludeArr, setWhatIncludeArr] = useState<packageInclude[]>([]);
+    const [whatIncludeArr, setWhatIncludeArr] = useState<packageInclude[]>(value);
 
     useEffect(() => {
         onChange?.(whatIncludeArr);
