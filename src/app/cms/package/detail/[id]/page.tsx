@@ -85,6 +85,19 @@ export default function PackageDetail() {
                             }
                         </div>
                         <div className="mt-[24px]">
+                            <span className="text-[20px] font-semibold">Additional Information</span>
+                            {
+                                packageByid !== null && !isLoading ?
+                                <div className="text-gray-600 text-[14px]">
+                                    {convert(packageByid.additional_description, {
+                                        wordwrap: 130
+                                    })}
+                                </div>
+                                :
+                                <TableLoader />
+                            }
+                        </div>
+                        <div className="mt-[24px]">
                             {
                                 packageByid !== null && !isLoading ?
                                 <TimelineComponent packageAttractions={packageByid.pakcageAttraction} />

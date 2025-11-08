@@ -84,6 +84,7 @@ export interface packageEntity {
     packageName:        string;
     packageType:        string;
     description:        string;
+    additional_description: string;
     province:           string;
     district:           string;
     subDistrict:        string;
