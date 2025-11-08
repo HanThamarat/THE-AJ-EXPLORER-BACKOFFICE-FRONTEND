@@ -11,7 +11,7 @@ import MapMarker from "@/app/components/map/mapMarker";
 import DefaultSelector, { SelectorOptionTpye } from "@/app/components/select/default-selector";
 import DefaultInput from "@/app/components/input/default-input";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import { packageBackDTO, PackageDTO, packageSchema } from "@/app/types/package";
+import { PackageAttractionDTO, packageAttractionEntity, packageBackDTO, PackageDTO, packageImageSave, PackageIncludeDTO, PackageNotIncludeDTO, PackageOptionDTO, packageSchema } from "@/app/types/package";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DefaultButton from "@/app/components/button/default-button";
 import { getAllPkgType } from "@/app/store/slice/pkgTypeManangementSlice";
@@ -192,11 +192,25 @@ export default function PacakageFormComponent() {
 
         if (packageId) {
             fecthPackageByid();
-
-            console.log(packageByid);
+        
             reset({
-                packageName: packageByid?.packageName
-            })
+                packageName: packageByid?.packageName,
+                description: packageByid?.description,
+                additional_description: packageByid?.additional_description,
+                depart_point: { lat: Number(packageByid?.depart_point_lat), lng: Number(packageByid?.depart_point_lon) },
+                end_point: { lat: Number(packageByid?.end_point_lat), lng: Number(packageByid?.end_point_lon) },
+                status: Boolean(packageByid?.status),
+                packageAttraction: packageByid?.pakcageAttraction as PackageAttractionDTO[],
+                benefit_include: packageByid?.benefit_include as PackageIncludeDTO[],
+                benefit_not_include: packageByid?.benefit_not_include as PackageNotIncludeDTO[], 
+                packageOption: packageByid?.packageOption as unknown as PackageOptionDTO[],
+                packageImage: packageByid?.packageImage.map((data) => ({
+                    base64: data.file_base64 as string,
+                    fileName: data.file_original_name,
+                    mainFile: data.mainFile,
+                    id: data.file_path
+                }))
+            });
         }
     }, [dispatch, packageByid, packageId]);
 

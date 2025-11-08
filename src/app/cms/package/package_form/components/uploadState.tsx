@@ -12,7 +12,7 @@ export default function FileUploadState({
     onChange
 }: FileUploadStatePropsType) {
 
-    const [imagesArr, setImageArr] = useState<PackageImageDTO[]>([]);
+    const [imagesArr, setImageArr] = useState<PackageImageDTO[]>(value);
 
     
 

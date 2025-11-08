@@ -78,6 +78,8 @@ export type PackageOptionDTO = z.infer<typeof packageOptionSchema>;
 export type PackageAttractionDTO = z.infer<typeof packageAttractionSchema>;
 export type PackageImageDTO = z.infer<typeof packageImageSchema>;
 export type PointDTO = z.infer<typeof pointSchema>;
+export type PackageIncludeDTO = z.infer<typeof packageIncludeSchema>;
+export type PackageNotIncludeDTO = z.infer<typeof packageNotIncludeSchema>;
 
 export interface packageEntity {
     id:                 number;
