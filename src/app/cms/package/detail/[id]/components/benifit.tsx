@@ -16,7 +16,7 @@ export default function BenefitComponent({
             <div className="w-full grid gap-[20px] grid-cols-2">
                 <div>
                     <span className="text-[18px] font-semibold">What's included</span>
-                    <div className="mt-[10px] grid grid-cols-1 gap-[10px]">
+                    <div className="mt-[10px] grid grid-cols-1 gap-[15px]">
                         {
                             benefit !== null && benefit.map((item, key) => (
                                 <div className="flex items-center gap-[5px]" key={key}>
@@ -31,7 +31,7 @@ export default function BenefitComponent({
                 </div>
                 <div>
                     <span className="text-[18px] font-semibold">What's Not Included</span>
-                    <div className="mt-[10px] grid grid-cols-1 gap-[10px]">
+                    <div className="mt-[10px] grid grid-cols-1 gap-[15px]">
                         {
                             not_benefit !== null && not_benefit.map((item, key) => (
                                 <div className="flex items-center gap-[5px]" key={key}>

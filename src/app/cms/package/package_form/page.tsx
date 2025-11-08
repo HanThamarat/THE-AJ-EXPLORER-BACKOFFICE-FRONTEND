@@ -23,10 +23,12 @@ import dynamic from "next/dynamic";
 import TableLoader from "@/app/components/loader/tableLoader";
 import PackagOtpSvg from "@/app/assets/images/svg/package_option_mockup.svg";
 import FileMockup from "@/app/assets/images/svg/file_mocup.svg";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import DefaultOutlineButton from "@/app/components/button/outline-button";
 import { ConfirmModal } from "@/app/components/modal/default-modal";
 import { createPacakage } from "@/app/store/slice/packageManagement";
+import { packageSelector } from "@/app/store/slice/packageManagement";
+import { getPackagebyId } from "@/app/store/slice/packageManagement";
 import notify from '@/app/components/alert/toastify';
 
 // components
@@ -58,12 +60,16 @@ const FileUploadState = dynamic(() => import("./components/uploadState"), {
 
 export default function PacakageForm() {
 
+    const searchParam = useSearchParams();
+    const packageId = searchParam.get('packageId');    
     const dispatch = useAppDispatch();
     const router = useRouter();
     const { pkgTypes } = useSelector(pkgTypeSelector);
     const { province } = useSelector(geolocationSelector);
+    const { packageByid } = useSelector(packageSelector);
     const isFachingPkgType = useRef(false);
     const isFachingProvince = useRef(false);
+    const isFachingPackage = useRef(false);
 
     // option
     const [pkgTypeOption, setPkgTypeOption] = useState<SelectorOptionTpye[]>();
@@ -174,6 +180,25 @@ export default function PacakageForm() {
             setPkgTypeOption(pkgTypeDataFormat);
         }
     }, [dispatch, pkgTypes]);
+
+
+    useEffect(() => {
+        const fecthPackageByid = async () => {
+            if (isFachingPackage.current) return;
+            isFachingPackage.current = true;
+            await dispatch(getPackagebyId(Number(packageId))); 
+            isFachingPackage.current = false;
+        }
+
+        if (packageId) {
+            fecthPackageByid();
+
+            console.log(packageByid);
+            reset({
+                packageName: packageByid?.packageName
+            })
+        }
+    }, [dispatch, packageByid, packageId]);
 
     const onChangeProvince = async (data: number) => {
         setDistrictOption([]);

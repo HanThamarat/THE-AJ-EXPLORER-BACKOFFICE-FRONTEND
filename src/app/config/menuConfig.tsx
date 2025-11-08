@@ -6,6 +6,8 @@ import { MenuItem } from "@/app/types/menu";
 import Luggage from "@/app/assets/images/svg/luggage.svg";
 import dashboard from "@/app/assets/images/svg/bar-chart-square.svg";
 import booking from "@/app/assets/images/svg/booking.svg";
+import compass from "@/app/assets/images/svg/compass.svg";
+import inbox from "@/app/assets/images/svg/inbox.svg";
 
 export const menu: MenuItem[] = [
   {
@@ -39,4 +41,14 @@ export const menu: MenuItem[] = [
       { label: "Add User", path: "/cms/usermanagement/add" },
     ],
   },
+  {
+    label: "Blog",
+    icon: <Image src={compass} alt="" />,
+    path: "/cms/dashboard",
+  },
+  {
+    label: "Contact us",
+    icon: <Image src={inbox} alt="" />,
+    path: "/cms/dashboard",
+  }
 ];

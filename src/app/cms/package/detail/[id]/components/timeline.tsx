@@ -2,6 +2,7 @@ import { packageAttractionEntity } from "@/app/types/package";
 import { SlLocationPin } from "react-icons/sl";
 import dayjs from "dayjs";
 import { useState } from "react";
+import { FaRegClock } from "react-icons/fa6";
 
 interface TimelineComponentProps {
     packageAttractions: packageAttractionEntity[] | null
@@ -28,7 +29,10 @@ export default function TimelineComponent({
                             </div>
                             <div className="grid grid-cols-1 gap-[10px]">
                                 <span className="font-medium">Stop at: {data.attractionName}</span>
-                                <span className="text-gray-600"> {dayjs(data.attractionTime).format('h A')}</span>
+                                <div className="flex items-center gap-[5px]">
+                                    <FaRegClock className="text-[18px] text-gray-600" />
+                                    <span className="text-gray-600"> {dayjs(data.attractionTime).format('h A')}</span>
+                                </div>
                             </div>
                         </div>
                     ))
