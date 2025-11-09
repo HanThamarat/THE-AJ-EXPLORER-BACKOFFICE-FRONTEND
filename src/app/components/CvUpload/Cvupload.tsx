@@ -15,13 +15,15 @@ export interface CvUploadComponentPropsType {
     qty?: number;
     value?: FilePreview[]
     onChange?: (value: FilePreview[]) => void;
+    description?: string;
 }
 
 const CvUploadComponent = ({
     value = [],
     qty = 1,
     label,
-    onChange
+    onChange,
+    description
 }: CvUploadComponentPropsType) => {
     const [files, setFiles] = useState<FilePreview[]>(value);
     const [isDragging, setIsDragging] = useState(false);
@@ -98,7 +100,8 @@ const CvUploadComponent = ({
                         <span className="text-red-500 font-medium">Click or drag</span> a file to this area to upload
                     </p>
                     <p className="text-sm text-gray-500">
-                        Upload product category image (40×40px)
+                        { description !== undefined ? description : "Upload file (40×40px)" }
+                        
                     </p>
                 </div>
             </div>

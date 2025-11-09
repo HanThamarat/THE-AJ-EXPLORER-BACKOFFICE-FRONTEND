@@ -7,6 +7,7 @@ import pkgTypeReducer from './slice/pkgTypeManangementSlice';
 import geolocationReducer from "./slice/geolocationSlice";
 import financialReducer from "./slice/financialSlice";
 import promotionReducer from "./slice/promotionSlice";
+import blogReducer from "./slice/blogManagement";
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
         geolocation: geolocationReducer,
         financial: financialReducer,
         promotion: promotionReducer,
+        blog: blogReducer,
     },
     devTools: process.env.NODE_ENV !== 'production',
 });
