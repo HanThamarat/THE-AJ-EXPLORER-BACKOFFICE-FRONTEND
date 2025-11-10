@@ -11,14 +11,14 @@ import MapMarker from "@/app/components/map/mapMarker";
 import DefaultSelector, { SelectorOptionTpye } from "@/app/components/select/default-selector";
 import DefaultInput from "@/app/components/input/default-input";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import { PackageAttractionDTO, packageAttractionEntity, packageBackDTO, PackageDTO, packageImageSave, PackageIncludeDTO, PackageNotIncludeDTO, PackageOptionDTO, packageSchema } from "@/app/types/package";
+import { PackageAttractionDTO, packageBackDTO, PackageDTO, PackageIncludeDTO, PackageNotIncludeDTO, PackageOptionDTO, packageSchema, packageTypeEntity } from "@/app/types/package";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DefaultButton from "@/app/components/button/default-button";
 import { getAllPkgType } from "@/app/store/slice/pkgTypeManangementSlice";
 import { pkgTypeSelector } from "@/app/store/slice/pkgTypeManangementSlice";
 import { geolocationSelector } from "@/app/store/slice/geolocationSlice";
 import { getAllProvinces, getDistrictByProId } from "@/app/store/slice/geolocationSlice";
-import { districtEntity, subDistrictEntity } from "@/app/types/geolocation";
+import { districtEntity, provinceEntiry, subDistrictEntity } from "@/app/types/geolocation";
 import dynamic from "next/dynamic";
 import TableLoader from "@/app/components/loader/tableLoader";
 import PackagOtpSvg from "@/app/assets/images/svg/package_option_mockup.svg";
@@ -78,6 +78,7 @@ export default function PacakageFormComponent() {
     const [subdistrictOption, setSubdistrictOptionOption] = useState<SelectorOptionTpye[] | undefined>();
     const [packageData, setPackageData] = useState<packageBackDTO | null>(null);
     const [comfirmModalIsOpen, setComfirmModalIsOpen] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     // storange
     const [districtStore, setDistrictStore] = useState<districtEntity[]>();
@@ -143,6 +144,9 @@ export default function PacakageFormComponent() {
     };
 
     useEffect(() => {
+        reset({
+            status: true,
+        });
         const getProvinces = async () => {
             if (isFachingProvince.current) return;
             isFachingProvince.current = true;
@@ -153,7 +157,7 @@ export default function PacakageFormComponent() {
         province === null && getProvinces();
 
         if (province?.length !== 0) {
-            const provinceDataFormat: SelectorOptionTpye[] = province ? province.map((data) => ({
+            const provinceDataFormat: SelectorOptionTpye[] = province ? province.map((data: provinceEntiry) => ({
                 value: Number(data.id),
                 label: data.nameEn
             })) : [];
@@ -172,7 +176,7 @@ export default function PacakageFormComponent() {
         pkgTypes === null && getPkgTYP();
 
         if (pkgTypes?.length !== 0) {
-            const pkgTypeDataFormat: SelectorOptionTpye[] = pkgTypes ? pkgTypes.map((data) => ({
+            const pkgTypeDataFormat: SelectorOptionTpye[] = pkgTypes ? pkgTypes.map((data: packageTypeEntity) => ({
                 value: Number(data.id),
                 label: data.name
             })) : [];
@@ -191,7 +195,7 @@ export default function PacakageFormComponent() {
         }
 
         if (packageId) {
-            fecthPackageByid();
+            fecthPackageByid();            
         
             reset({
                 packageName: packageByid?.packageName,
@@ -206,11 +210,13 @@ export default function PacakageFormComponent() {
                 packageOption: packageByid?.packageOption as unknown as PackageOptionDTO[],
                 packageImage: packageByid?.packageImage.map((data) => ({
                     base64: data.file_base64 as string,
-                    fileName: data.file_original_name,
+                    fileName: data.file_original_name as string,
                     mainFile: data.mainFile,
                     id: data.file_path
                 }))
             });
+
+            setIsLoading(false);
         }
     }, [dispatch, packageByid, packageId]);
 
@@ -238,7 +244,7 @@ export default function PacakageFormComponent() {
     }
 
     return(
-        <>
+        !isLoading && <>
         <ConfirmModal
             title="Do you want to Create Package ?"
             description="Confirm to proceed with Creation this package."
@@ -278,11 +284,11 @@ export default function PacakageFormComponent() {
                                 rules={{ required: "Package type is required" }}
                                 render={({ field }) => (
                                     <DefaultSelector
-                                    label="Package type*"
-                                    placeholder="Please select package type"
-                                    option={pkgTypeOption}
-                                    value={field.value}
-                                    onChange={(value) => field.onChange(Number(value))}
+                                        label="Package type*"
+                                        placeholder="Please select package type"
+                                        option={pkgTypeOption}
+                                        value={field.value}
+                                        onChange={(value) => field.onChange(Number(value))}
                                     />
                                 )}
                             />
@@ -304,14 +310,14 @@ export default function PacakageFormComponent() {
                                     rules={{ required: "Package type is required" }}
                                     render={({ field }) => (
                                         <DefaultSelector
-                                        label="Province *"
-                                        placeholder="Please select province"
-                                        option={provinceOption}
-                                        value={field.value}
-                                        onChange={(value) => {
-                                            field.onChange(Number(value));
-                                            onChangeProvince(value);
-                                        }}
+                                            label="Province *"
+                                            placeholder="Please select province"
+                                            option={provinceOption}
+                                            value={field.value}
+                                            onChange={(value) => {
+                                                field.onChange(Number(value));
+                                                onChangeProvince(value);
+                                            }}
                                         />
                                     )}
                                 />
@@ -324,14 +330,14 @@ export default function PacakageFormComponent() {
                                     rules={{ required: "Package type is required" }}
                                     render={({ field }) => (
                                         <DefaultSelector
-                                        label="District *"
-                                        placeholder="Please select district"
-                                        option={districtOption}
-                                        value={field.value}
-                                        onChange={(value) => {
-                                            field.onChange(Number(value));
-                                            handlerChangeDisTrict(Number(value));
-                                        }}
+                                            label="District *"
+                                            placeholder="Please select district"
+                                            option={districtOption}
+                                            value={field.value}
+                                            onChange={(value) => {
+                                                field.onChange(Number(value));
+                                                handlerChangeDisTrict(Number(value));
+                                            }}
                                         />
                                     )}
                                 />
@@ -344,11 +350,11 @@ export default function PacakageFormComponent() {
                                     rules={{ required: "Package type is required" }}
                                     render={({ field }) => (
                                         <DefaultSelector
-                                        label="Sub District *"
-                                        placeholder="Please select sub district"
-                                        option={subdistrictOption}
-                                        value={field.value}
-                                        onChange={(value) => field.onChange(Number(value))}
+                                            label="Sub District *"
+                                            placeholder="Please select sub district"
+                                            option={subdistrictOption}
+                                            value={field.value}
+                                            onChange={(value) => field.onChange(Number(value))}
                                         />
                                     )}
                                 />
