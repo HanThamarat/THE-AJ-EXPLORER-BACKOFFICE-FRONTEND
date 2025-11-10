@@ -3,7 +3,7 @@ import z from "zod";
 export const ImageDTOSchema = z.object({
     id:                z.string().min(0),
     base64:            z.string().min(1),
-    fileName:          z.string().min(1),
+    fileName:          z.string().min(1).optional(),
     mainFile:          z.boolean(),    
 });
 

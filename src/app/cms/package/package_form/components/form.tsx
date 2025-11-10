@@ -66,7 +66,7 @@ export default function PacakageFormComponent() {
     const router = useRouter();
     const { pkgTypes } = useSelector(pkgTypeSelector);
     const { province } = useSelector(geolocationSelector);
-    const { packageByid, loading } = useSelector(packageSelector);
+    const { packageByid } = useSelector(packageSelector);
     const isFachingPkgType = useRef(false);
     const isFachingProvince = useRef(false);
     const isFachingPackage = useRef(false);
@@ -144,6 +144,9 @@ export default function PacakageFormComponent() {
     };
 
     useEffect(() => {
+        reset({
+            status: true,
+        });
         const getProvinces = async () => {
             if (isFachingProvince.current) return;
             isFachingProvince.current = true;

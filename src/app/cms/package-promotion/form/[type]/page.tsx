@@ -46,6 +46,9 @@ export default function PromotionForm() {
     } = useForm<promotionType>({ resolver: zodResolver(PromotionSchema) });
 
     useEffect(() => {
+        reset({
+            status: true,
+        });
         if (promo_id) {
             const fetchPromo = async () => {
             if (isFaching.current) return;
@@ -58,7 +61,9 @@ export default function PromotionForm() {
 
             if (!promotion) fetchPromo();
         } else {
-            reset();
+            reset({
+                status: true
+            });
             setPageLaoding(false);
         }
     }, [dispatch, promo_id]);

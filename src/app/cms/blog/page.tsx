@@ -1,7 +1,7 @@
 "use client"
 
 import DefaultButton from "@/app/components/button/default-button";
-import { FiPlus } from "react-icons/fi";
+import { FiEdit, FiPlus } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -36,16 +36,15 @@ export default function BlogPage() {
         blogs === null && fecthBlogsData();
 
         if (blogs?.length !== 0 && blogs !== null) {
-            console.log(blogs);
             const blogFormetter: BlogDataTableType[] = blogs.map((data: BlogEntitySchemaType, key) => ({
                 index:  key + 1,
                 id: data.id,
                 blogName: data.title,
                 type: data.blogtype as string,
                 status: data.status,
-                createdBy: data.created_by,
+                createdBy: data.created_by as string,
                 updatedAt: data.updated_at,
-                updatedBy: data.updated_by
+                updatedBy: data.updated_by as string,
             }));
             setBlogDataTable(blogFormetter);
             setIsLoading(false);
@@ -105,7 +104,9 @@ export default function BlogPage() {
             header: "",
             cell: ({ row }) => (
                 <div className="flex gap-[10px] items-center">
-                   
+                   <button  onClick={() => router.push(`/cms/blog/blog_form?blogId=${row.original.id}`)} >
+                        <FiEdit className="text-[18px] font-semibold text-gray-500" />
+                    </button>
                 </div>
             )
         }

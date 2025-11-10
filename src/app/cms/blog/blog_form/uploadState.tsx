@@ -1,10 +1,10 @@
 import CvUploadComponent, { FilePreview } from "@/app/components/CvUpload/Cvupload";
 import { useEffect, useState } from "react";
-import { PackageImageDTO } from "@/app/types/package";
+import { ImageDTOSchemaType } from "@/app/types/image";
 
 interface FileUploadStateBlogPropsType {
-    value?: PackageImageDTO[]
-    onChange?: (value: PackageImageDTO[]) => void;
+    value?: ImageDTOSchemaType[]
+    onChange?: (value: ImageDTOSchemaType[]) => void;
 }
 
 export default function FileUploadStateBlog({
@@ -12,14 +12,14 @@ export default function FileUploadStateBlog({
     onChange
 }: FileUploadStateBlogPropsType) {
 
-    const [imagesArr, setImageArr] = useState<PackageImageDTO[]>(value);
+    const [imagesArr, setImageArr] = useState<ImageDTOSchemaType[]>(value);
 
     useEffect(() => {
         onChange?.(imagesArr);
     }, [imagesArr]);
 
     const handlerUploadImage = (fileResponse: FilePreview[]) => {
-        let newImageArr: PackageImageDTO[] = [];
+        let newImageArr: ImageDTOSchemaType[] = [];
         for (const file of fileResponse) {
             newImageArr.push({
                 id: file.id,
@@ -44,7 +44,7 @@ export default function FileUploadStateBlog({
                 label="Thumbnail (PNG, JPG) *"
                 qty={1}
                 value={
-                    imagesArr.filter(img => img.mainFile === false).map((imgs) => ({
+                    imagesArr.map((imgs) => ({
                         id: imgs.id,
                         preview: imgs.base64,
                         file: {} as File,    
