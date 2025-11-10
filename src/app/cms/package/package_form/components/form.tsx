@@ -144,9 +144,12 @@ export default function PacakageFormComponent() {
     };
 
     useEffect(() => {
-        reset({
-            status: true,
-        });
+        if (packageId === null) {
+            setIsLoading(false);
+            reset({
+                status: true,
+            });
+        }
         const getProvinces = async () => {
             if (isFachingProvince.current) return;
             isFachingProvince.current = true;
@@ -244,7 +247,7 @@ export default function PacakageFormComponent() {
     }
 
     return(
-        !isLoading && <>
+        isLoading === false && <>
         <ConfirmModal
             title="Do you want to Create Package ?"
             description="Confirm to proceed with Creation this package."
