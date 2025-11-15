@@ -107,7 +107,12 @@ export default function PacakageFormComponent() {
             benefit_include: data.benefit_include,
             benefit_not_include: data.benefit_not_include,
             status: data.status,
-            packageImage: data.packageImage,
+            packageImage: data.packageImage ? data.packageImage.map((data) => ({
+                base64: data.base64,
+                fileName: data.fileName ?? "unknow.png",
+                id: data.id,
+                mainFile: data.mainFile
+            })) : [],
             packageOption: data.packageOption,
             attraction: data.packageAttraction
         } 
@@ -198,11 +203,18 @@ export default function PacakageFormComponent() {
         }
 
         if (packageId) {
-            fecthPackageByid();            
+            fecthPackageByid();          
+            
+            onChangeProvince(packageByid?.provinceId as number);
+            if (packageByid?.district) handlerChangeDisTrict(packageByid.districtId as number);
         
             reset({
+                packageTypeId: packageByid?.packageTypeId,
                 packageName: packageByid?.packageName,
                 description: packageByid?.description,
+                provinceId: packageByid?.provinceId,
+                districtId: packageByid?.districtId,
+                subDistrictId: packageByid?.subDistrictId,
                 additional_description: packageByid?.additional_description,
                 depart_point: { lat: Number(packageByid?.depart_point_lat), lng: Number(packageByid?.depart_point_lon) },
                 end_point: { lat: Number(packageByid?.end_point_lat), lng: Number(packageByid?.end_point_lon) },
@@ -221,14 +233,14 @@ export default function PacakageFormComponent() {
 
             setIsLoading(false);
         }
-    }, [dispatch, packageByid, packageId]);
+    }, [dispatch, packageId]);
 
     const onChangeProvince = async (data: number) => {
         setDistrictOption([]);
         setSubdistrictOptionOption([]);
         const district: any = await dispatch(getDistrictByProId(data));
         setDistrictStore(district?.payload?.data);
-        const districtFormat: SelectorOptionTpye[] = district?.payload?.data.map((data: districtEntity) => ({
+        const districtFormat: SelectorOptionTpye[] = district?.payload?.data?.map((data: districtEntity) => ({
             value: Number(data.id),
             label: data.nameEn
         }));
@@ -239,6 +251,8 @@ export default function PacakageFormComponent() {
     const handlerChangeDisTrict = async (data: number) => {
         setSubdistrictOptionOption([]);
         const fillterSubDis = await districtStore?.filter((dis) => dis.id === data);
+        console.log(fillterSubDis);
+        
         const subDistrictFormat : SelectorOptionTpye[] | undefined =  fillterSubDis ? fillterSubDis[0].subdistricts?.map((data: subDistrictEntity) => ({
             value: Number(data.id),
             label: data.nameEn

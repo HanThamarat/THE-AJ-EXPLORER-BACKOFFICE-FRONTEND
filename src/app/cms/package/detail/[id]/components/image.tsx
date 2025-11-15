@@ -40,11 +40,11 @@ export default function ImageDisplayComponent({
             {
                 (!isLoading) && (
                     images.map((data, key) => (
-                    <div key={key} className="w-full h-full overflow-hidden rounded-[10px] relative cursor-pointer" onClick={() => setIsOpenModal(true)}>
+                    <div key={key} className="w-full h-[180px] overflow-hidden rounded-[10px] relative cursor-pointer" onClick={() => setIsOpenModal(true)}>
                         <AntdImage
                             src={data.file_base64 as string}
                             alt=""
-                            className="w-full h-full object-cover"
+                            className="w-full h-[180px] object-cover"
                         />
                     </div>
                     ))
@@ -53,7 +53,7 @@ export default function ImageDisplayComponent({
         </div>   
         </Modal>
         <div className="w-full grid grid-cols-2 gap-[10px] items-center justify-between">
-            <div className="w-full h-full overflow-hidden rounded-[10px] cursor-pointer" onClick={() => setIsOpenModal(true)}>
+            <div className="w-full h-[370px] overflow-hidden rounded-[10px] cursor-pointer" onClick={() => setIsOpenModal(true)}>
                 {
                     !isLoading && <Image src={mainImage[0].file_base64 as string} alt="" width={0} height={0} className="w-full h-full object-cover" />
                 }
@@ -62,7 +62,7 @@ export default function ImageDisplayComponent({
                 {
                    (!isLoading) && (
                         childsImage.slice(0, 4).map((data, key) => (
-                        <div key={key} className="w-full h-full overflow-hidden rounded-[10px] relative cursor-pointer" onClick={() => setIsOpenModal(true)}>
+                        <div key={key} className="w-full h-[180px] overflow-hidden rounded-[10px] relative cursor-pointer" onClick={() => setIsOpenModal(true)}>
                             {key !== 3 ? (
                                 <Image
                                     src={data.file_base64 as string}
