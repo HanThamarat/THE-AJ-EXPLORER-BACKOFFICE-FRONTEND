@@ -45,7 +45,7 @@ export const packageNotIncludeSchema = z.object({
 export const packageImageSchema = z.object({
     id:                z.string().min(0),
     base64:            z.string().min(1),
-    fileName:          z.string().min(1),
+    fileName:          z.string().min(1).optional(),
     mainFile:          z.boolean(),    
 });
 

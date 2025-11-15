@@ -107,7 +107,12 @@ export default function PacakageFormComponent() {
             benefit_include: data.benefit_include,
             benefit_not_include: data.benefit_not_include,
             status: data.status,
-            packageImage: data.packageImage,
+            packageImage: data.packageImage ? data.packageImage.map((data) => ({
+                base64: data.base64,
+                fileName: data.fileName ?? "unknow.png",
+                id: data.id,
+                mainFile: data.mainFile
+            })) : [],
             packageOption: data.packageOption,
             attraction: data.packageAttraction
         } 
