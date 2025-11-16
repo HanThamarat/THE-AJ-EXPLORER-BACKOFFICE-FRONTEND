@@ -87,3 +87,9 @@ export interface promotionLinkTableType {
     packageLink:    string;
     percentage:     number;
 }
+
+export interface promotionDay {
+    id:             number;
+    startDate:      string | Date;
+    endDate:        string | Date;
+}
