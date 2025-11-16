@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useSearchParams } from "next/navigation";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import DefaultInput from "@/app/components/input/default-input";
-import CvMultipleDatePicker from "@/app/components/datePIcker/cvMultipleDatePicker";
+import CvMultipleDatePicker, { disableday } from "@/app/components/datePIcker/cvMultipleDatePicker";
 import DefaultTextArea from "@/app/components/textarea/default-textarea";
 import DefaultOutlineButton from "@/app/components/button/outline-button";
 import PromotionLink from "./component/promolink";
@@ -16,16 +16,17 @@ import { useEffect, useRef, useState } from "react";
 import { ConfirmModal } from "@/app/components/modal/default-modal";
 import notify from "@/app/components/alert/toastify";
 import { useAppDispatch } from "@/app/hook/appDispatch";
-import { createNewPromotion, UpdatePromoPropsType, updatePromotion } from "@/app/store/slice/promotionSlice";
+import { createNewPromotion, getAllPromotionday, UpdatePromoPropsType, updatePromotion } from "@/app/store/slice/promotionSlice";
 import { useSelector } from "react-redux";
 import { promotionSelector } from "@/app/store/slice/promotionSlice";
 import { getPromotionById } from "@/app/store/slice/promotionSlice";
 import TableLoader from "@/app/components/loader/tableLoader";
+import dayjs from "dayjs";
 
 export default function PromotionForm() {
 
     const dispatch = useAppDispatch();
-    const { promotion } = useSelector(promotionSelector);
+    const { promotion, promoDay } = useSelector(promotionSelector);
     const param = useParams();
     const router = useRouter();
     const pageType  = param.type as 'promotion' | 'coupon';
@@ -35,7 +36,9 @@ export default function PromotionForm() {
     const [openConfirmModal, setopenConfirmModal] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [pageIsLoading, setPageLaoding] = useState<boolean>(true);
+    const [promoDayDisble, setPromoDayDisable] = useState<disableday[]>([]);
     const isFaching = useRef(false);
+    const isFachingPromoDay = useRef(false);
 
     const {
         register,
@@ -93,6 +96,27 @@ export default function PromotionForm() {
                 }, 0);
         } 
     }, [promotion, reset]);
+
+    useEffect(() => {
+        const fecthPromoDay = async () => {
+            if (isFachingPromoDay.current) return;
+            isFachingPromoDay.current = true;
+            await dispatch(getAllPromotionday());
+            isFachingPromoDay.current = false;
+        }
+
+        fecthPromoDay();
+
+        if (promoDay?.length !== 0 && promoDay !== null) {
+         
+            setPromoDayDisable(
+                promoDay.map((data) => ({
+                    start: dayjs(data.startDate),
+                    end: dayjs(data.endDate)
+                }))
+            );
+        }
+    }, [dispatch, promoDay]);
 
     const handlerSubmittion: SubmitHandler<promotionType> = async (data) => {
         const dataFormat: PromotionDTO = {
@@ -223,6 +247,7 @@ export default function PromotionForm() {
                                             label={ pageType ? "Promotion Date*" : "Coupon Date*" }
                                             value={field.value}
                                             onChange={field.onChange}
+                                            disableday={promoDayDisble}
                                         />
                                     )}
                                 />

@@ -1,4 +1,4 @@
-import { PromotionDTO, PromotionEntity } from "@/app/types/promotion";
+import { promotionDay, PromotionDTO, PromotionEntity } from "@/app/types/promotion";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { AxiosInstance } from "@/app/hook/axiosInstance";
@@ -58,16 +58,28 @@ export const updatePromotion = createAsyncThunk("promotionSlice/updatePromotion"
     }
 });
 
+export const getAllPromotionday = createAsyncThunk("promotionSlice/getAllPromotionday", async () => {
+    try {
+        const response = await AxiosInstance.get("/packagepromotion/promotion_day");
+
+        return { status: true, data: response.data.body };
+    } catch (error: any) {
+        return { status: false, error: error?.response.data.error };
+    }
+});
+
 
 interface packageType {
     promotions: PromotionEntity[] | [] | null;
     promotion: PromotionEntity | null;
+    promoDay: promotionDay[] | [] | null;
     loading: boolean;
     error: unknown;
 }
 
 const initialState: packageType = {
     promotions: null,
+    promoDay: null,
     promotion: null,
     loading: false,
     error: null
@@ -89,7 +101,9 @@ const promotionSlice = createSlice({
             (action) => action.type.endsWith("/fulfilled"),
             (state, action: PayloadAction<{ data?: any }>) => {
                 state.loading = false;
-                if (action.type.includes('getAllPromotion')) {
+                if (action.type.includes("getAllPromotionday")) {
+                    state.promoDay = action.payload.data as promotionDay[];
+                } else if (action.type.includes('getAllPromotion')) {
                     state.promotions = action.payload.data as PromotionEntity[];
                 } else if (action.type.includes('createNewPromotion')) {
                     if (action.payload.data) state.promotions = [
