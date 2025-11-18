@@ -108,13 +108,17 @@ export default function PromotionForm() {
         fecthPromoDay();
 
         if (promoDay?.length !== 0 && promoDay !== null) {
-         
-            setPromoDayDisable(
-                promoDay.map((data) => ({
-                    start: dayjs(data.startDate),
-                    end: dayjs(data.endDate)
-                }))
-            );
+            
+            const filterCoupuDisable: disableday[] = promoDay.filter((data) => data.type === 'coupon').map((data) => ({
+                start: dayjs(data.startDate),
+                end: dayjs(data.endDate)
+            }));
+            const filterPromoDisable: disableday[] = promoDay.filter((data) => data.type === 'promotion').map((data) => ({
+                start: dayjs(data.startDate),
+                end: dayjs(data.endDate)
+            }));
+            
+            setPromoDayDisable(pageType === 'promotion' ? filterPromoDisable : filterCoupuDisable);
         }
     }, [dispatch, promoDay]);
 
