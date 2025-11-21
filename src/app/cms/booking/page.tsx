@@ -46,8 +46,9 @@ export default function BookingPage() {
             }));
 
             setBookingTableData(bookingFormatter);
-            setIsLoading(false);
         }
+
+        bookings !== null && setIsLoading(false);
     }, [dispatch, bookings]);
 
 

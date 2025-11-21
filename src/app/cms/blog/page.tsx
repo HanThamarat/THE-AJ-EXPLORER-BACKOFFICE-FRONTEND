@@ -47,8 +47,9 @@ export default function BlogPage() {
                 updatedBy: data.updated_by as string,
             }));
             setBlogDataTable(blogFormetter);
-            setIsLoading(false);
         }
+
+        blogs !== null && setIsLoading(false);
     }, [dispatch, blogs]);
 
     const columns: ColumnDef<BlogDataTableType>[] = [
