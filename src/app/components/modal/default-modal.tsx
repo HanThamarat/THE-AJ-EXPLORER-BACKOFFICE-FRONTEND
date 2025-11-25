@@ -3,7 +3,6 @@ import featuredIcon from "@/app/assets/images/svg/featured.svg";
 import Image from "next/image";
 import DefaultButton from "../button/default-button";
 import DefaultOutlineButton from "../button/outline-button";
-import { fa } from "zod/v4/locales";
 
 interface ModalProps {
     confirmFunc?: () => void; 
