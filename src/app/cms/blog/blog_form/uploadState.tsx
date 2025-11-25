@@ -19,22 +19,18 @@ export default function FileUploadStateBlog({
     }, [imagesArr]);
 
     const handlerUploadImage = (fileResponse: FilePreview[]) => {
-        let newImageArr: ImageDTOSchemaType[] = [];
-        for (const file of fileResponse) {
-            newImageArr.push({
-                id: file.id,
-                fileName: file.file.name,
-                base64: file.preview,
-                mainFile: false
-            });
-        }
+        const newThumbnailArr: ImageDTOSchemaType[] = fileResponse.map(file => ({
+            id: file.id,
+            fileName: file.file.name,
+            base64: file.preview,
+            mainFile: true
+        }));
 
-        setImageArr((prev) => {
-            const filteredPrev = prev.filter(
-                prevItem => !newImageArr.some(newItem => newItem.id === prevItem.id)
-            );
+        setImageArr(prev => {
+            // remove old thumbnail(s)
+            const filteredPrev = prev.filter(prevItem => !prevItem.mainFile);
 
-            return [...filteredPrev, ...newImageArr];
+            return [...filteredPrev, ...newThumbnailArr];
         });
     }
 
@@ -43,6 +39,7 @@ export default function FileUploadStateBlog({
          <CvUploadComponent 
                 label="Thumbnail (PNG, JPG) *"
                 qty={1}
+                aollowFileTypes={['image/png', 'image/jpeg']}
                 value={
                     imagesArr.map((imgs) => ({
                         id: imgs.id,
