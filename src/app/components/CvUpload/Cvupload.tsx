@@ -3,6 +3,7 @@ import Image from "next/image";
 import UploadIcon from "@/app/assets/images/svg/upload-cloud.svg";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { BASE64_CONVERTION } from "@/app/hook/baseCovert";
+import { WarningModal } from "../modal/alert-modal";
 
 export interface FilePreview {
   id: string;
@@ -16,6 +17,7 @@ export interface CvUploadComponentPropsType {
     value?: FilePreview[]
     onChange?: (value: FilePreview[]) => void;
     description?: string;
+    aollowFileTypes?: ('image/png' | 'image/gif' | 'image/jpeg' | 'application/pdf' | 'video/mp4' | 'video/quicktime' | 'video/*' | 'image/*' )[];
 }
 
 const CvUploadComponent = ({
@@ -23,25 +25,39 @@ const CvUploadComponent = ({
     qty = 1,
     label,
     onChange,
-    description
+    description,
+    aollowFileTypes = [ 'image/*' ]
 }: CvUploadComponentPropsType) => {
     const [files, setFiles] = useState<FilePreview[]>(value);
     const [isDragging, setIsDragging] = useState(false);
-     const fileInputRef = useRef<HTMLInputElement>(null); 
+    const fileInputRef = useRef<HTMLInputElement>(null); 
+    const [isOpenWarnModal, setIsOpenWarnModal] = useState<boolean>(false);
 
     useEffect(() => { 
         onChange?.(files);
     }, [files]);
 
-  const handleFiles = useCallback(async (filesAccepted: File) => {
-        const base64 = await BASE64_CONVERTION.toBase64(filesAccepted);
-        const newFiles: FilePreview = {
-            id: crypto.randomUUID(),
-            file: filesAccepted,
-            preview: base64,
-        };
-        setFiles((prev) => [...prev, newFiles].slice(0, qty));
-       
+  const handleFiles = useCallback(async (filesAccepted: File) => {  
+        const fileAcceptedType: string = filesAccepted.type;        
+        const isTypeAllowed = aollowFileTypes.some((allowed) => {
+            if (allowed.endsWith("/*")) {
+                const base = allowed.replace("/*", "");
+                return fileAcceptedType.startsWith(base + "/");
+            }
+            return allowed === fileAcceptedType;
+        });
+        
+        if (isTypeAllowed) {
+            const base64 = await BASE64_CONVERTION.toBase64(filesAccepted);
+            const newFiles: FilePreview = {
+                id: crypto.randomUUID(),
+                file: filesAccepted,
+                preview: base64,
+            };
+            setFiles((prev) => [...prev, newFiles].slice(0, qty));   
+        } else {
+            setIsOpenWarnModal(true);
+        }   
   }, []);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -71,6 +87,12 @@ const CvUploadComponent = ({
 
   return (
     <div className="w-full flex flex-col gap-[2px]">
+        <WarningModal
+            open={isOpenWarnModal}
+            title="Upload File Failed"
+            description="Please recheck your file type."
+            confirmFunc={() => setIsOpenWarnModal(!isOpenWarnModal)}
+        />
         { label && <span className="font-medium text-[12px]">{label} ({files.length}/{qty})</span> }
         <div className="w-full">
             {/* Drop Area */}
@@ -87,7 +109,6 @@ const CvUploadComponent = ({
                     ref={fileInputRef}
                     type="file"
                     multiple
-                    accept="image/*"
                     className="hidden"
                     onChange={handleInputChange}
                 />
@@ -100,8 +121,22 @@ const CvUploadComponent = ({
                         <span className="text-red-500 font-medium">Click or drag</span> a file to this area to upload
                     </p>
                     <p className="text-sm text-gray-500">
-                        { description !== undefined ? description : "Upload file (40×40px)" }
-                        
+                        {`(${
+                            aollowFileTypes
+                            .map((type) => {
+                            if (type === "image/*") return "png, jpeg, jpg, svg";
+                            if (type === "image/gif") return "gif";
+                            if (type === "image/jpeg") return "jpeg, jpg";
+                            if (type === "image/png") return "png";
+                            if (type === "video/*") return "mp4, mov";
+                            if (type === "video/mp4") return "mp4";
+                            if (type === "video/quicktime") return "mov";
+                            if (type === "application/pdf") return "pdf";
+                            return type; // fallback
+                            })
+                            .join(", ")
+                        })`}
+                        { description !== undefined ? description : "40×40 pixel" }
                     </p>
                 </div>
             </div>

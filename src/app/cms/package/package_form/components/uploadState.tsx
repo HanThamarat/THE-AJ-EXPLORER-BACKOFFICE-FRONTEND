@@ -17,46 +17,36 @@ export default function FileUploadState({
     
 
     useEffect(() => {
-        onChange?.(imagesArr);
+        onChange?.(imagesArr);        
     }, [imagesArr]);
 
     const handlerUploadthumbnail = (fileResponse: FilePreview[]) => {
-        let newThumnail: PackageImageDTO[] = [];
-        const fillterData: FilePreview[] = fileResponse.filter(item => item.id !== item.id);
-        console.log(fillterData);
-        for (const file of fileResponse) {
-            newThumnail.push({
-                id: file.id,
-                fileName: file.file.name,
-                base64: file.preview,
-                mainFile: true
-            });
-        }
-        setImageArr((prev) => {
-            const filteredPrev = prev.filter(
-                prevItem => !newThumnail.some(newItem => newItem.id === prevItem.id)
-            );
-            return [...filteredPrev, ...newThumnail];
+        const newThumbnailArr: PackageImageDTO[] = fileResponse.map(file => ({
+            id: file.id,
+            fileName: file.file.name,
+            base64: file.preview,
+            mainFile: true
+        }));
+
+        setImageArr(prev => {
+            // remove old thumbnail(s)
+            const filteredPrev = prev.filter(prevItem => !prevItem.mainFile);
+
+            return [...filteredPrev, ...newThumbnailArr];
         });
     }
 
     const handlerUploadImage = (fileResponse: FilePreview[]) => {
-        let newImageArr: PackageImageDTO[] = [];
-        for (const file of fileResponse) {
-            newImageArr.push({
-                id: file.id,
-                fileName: file.file.name,
-                base64: file.preview,
-                mainFile: false
-            });
-        }
+        const newImageArr: PackageImageDTO[] = fileResponse.map(file => ({
+            id: file.id,
+            fileName: file.file.name,
+            base64: file.preview,
+            mainFile: false
+        }));
 
-        setImageArr((prev) => {
-            const filteredPrev = prev.filter(
-                prevItem => !newImageArr.some(newItem => newItem.id === prevItem.id)
-            );
-
-            return [...filteredPrev, ...newImageArr];
+        setImageArr(prev => {
+            const keepOnlyThumbnails = prev.filter(item => item.mainFile === true);
+            return [...keepOnlyThumbnails, ...newImageArr];
         });
     }
 
@@ -64,6 +54,7 @@ export default function FileUploadState({
         <div className="w-full flex flex-col gap-[24px]">
             <CvUploadComponent 
                 label="Upload thumbnail image"
+                aollowFileTypes={["image/png", "image/jpeg"]}
                 qty={1}
                 value={
                     imagesArr.filter(img => img.mainFile === true).map((imgs) => ({
@@ -75,18 +66,19 @@ export default function FileUploadState({
                 onChange={handlerUploadthumbnail}
             />
             <div>
-                 <CvUploadComponent 
-                label="Upload images"
-                qty={20}
-                value={
-                    imagesArr.filter(img => img.mainFile === false).map((imgs) => ({
-                        id: imgs.id,
-                        preview: imgs.base64,
-                        file: {} as File,    
-                    }))
-                }
-                onChange={handlerUploadImage}
-            />
+                <CvUploadComponent 
+                    label="Upload images"
+                    aollowFileTypes={["image/png", "image/jpeg"]}
+                    qty={20}
+                    value={
+                        imagesArr.filter(img => img.mainFile === false).map((imgs) => ({
+                            id: imgs.id,
+                            preview: imgs.base64,
+                            file: {} as File,    
+                        }))
+                    }
+                    onChange={handlerUploadImage}
+                />
             </div>
         
         </div>
