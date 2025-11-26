@@ -18,6 +18,7 @@ export interface CvUploadComponentPropsType {
     onChange?: (value: FilePreview[]) => void;
     description?: string;
     aollowFileTypes?: ('image/png' | 'image/gif' | 'image/jpeg' | 'application/pdf' | 'video/mp4' | 'video/quicktime' | 'video/*' | 'image/*' )[];
+    maxSize?: number;
 }
 
 const CvUploadComponent = ({
@@ -26,19 +27,23 @@ const CvUploadComponent = ({
     label,
     onChange,
     description,
-    aollowFileTypes = [ 'image/*' ]
+    aollowFileTypes = [ 'image/*' ],
+    maxSize = 10,
 }: CvUploadComponentPropsType) => {
     const [files, setFiles] = useState<FilePreview[]>(value);
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null); 
     const [isOpenWarnModal, setIsOpenWarnModal] = useState<boolean>(false);
+    const [modalTitleMessage, setModalTitleMessage] = useState<string>("");
+    const [modalDescriptionMessage, setModalDescriptionMessage] = useState<string>("");
 
     useEffect(() => { 
         onChange?.(files);
     }, [files]);
 
   const handleFiles = useCallback(async (filesAccepted: File) => {  
-        const fileAcceptedType: string = filesAccepted.type;        
+        const fileAcceptedType: string = filesAccepted.type;      
+        const fileSize = filesAccepted.size / (1024 * 1024);
         const isTypeAllowed = aollowFileTypes.some((allowed) => {
             if (allowed.endsWith("/*")) {
                 const base = allowed.replace("/*", "");
@@ -47,7 +52,7 @@ const CvUploadComponent = ({
             return allowed === fileAcceptedType;
         });
         
-        if (isTypeAllowed) {
+        if (isTypeAllowed && fileSize <= maxSize) {
             const base64 = await BASE64_CONVERTION.toBase64(filesAccepted);
             const newFiles: FilePreview = {
                 id: crypto.randomUUID(),
@@ -57,6 +62,13 @@ const CvUploadComponent = ({
             setFiles((prev) => [...prev, newFiles].slice(0, qty));   
         } else {
             setIsOpenWarnModal(true);
+            if (fileSize > maxSize) {
+                setModalTitleMessage("File size is too large.");
+                setModalDescriptionMessage(`Please upload a file smaller than ${maxSize}MB.`);
+            } else {
+                setModalTitleMessage("File type is not allowed.");
+                setModalDescriptionMessage("Please upload a file of type");
+            }
         }   
   }, []);
 
@@ -89,8 +101,8 @@ const CvUploadComponent = ({
     <div className="w-full flex flex-col gap-[2px]">
         <WarningModal
             open={isOpenWarnModal}
-            title="Upload File Failed"
-            description="Please recheck your file type."
+            title={modalTitleMessage}
+            description={modalDescriptionMessage}
             confirmFunc={() => setIsOpenWarnModal(!isOpenWarnModal)}
         />
         { label && <span className="font-medium text-[12px]">{label} ({files.length}/{qty})</span> }
