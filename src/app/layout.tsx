@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`antialiased text-[12px]`}
+        className={`antialiased text-[12px] text-gray-700`}
         cz-shortcut-listen="true"
       >
         <ReduxProvider>
