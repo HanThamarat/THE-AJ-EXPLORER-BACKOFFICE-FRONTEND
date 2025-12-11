@@ -67,7 +67,7 @@ export default function PromotiomDetail({
                     <span className="text-[#414651]">Back to promotion & coupon</span>
                 </button>
                 <div className="flex gap-[10px] items-center">
-                    <button onClick={() => router.push(`/cms/package/package-promotion/form/${promoData.type}?promo_id=${promoData.id}`)} >
+                    <button onClick={() => router.push(`/cms/package-promotion/form/${promoData.type}?promo_id=${promoData.id}`)} >
                         <FiEdit className="text-[18px] font-semibold text-gray-500" />
                     </button>
                     <DelPromotionModal promoId={promoData.id} />
