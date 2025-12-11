@@ -1,4 +1,4 @@
-
+import z from "zod";
 
 export interface bookingEntity {
     index?:             number;
@@ -13,3 +13,17 @@ export interface bookingEntity {
     created_at:         Date | string;
     updated_at:         Date | string;
 }
+
+export const bookingAvgDataSchema = z.object({
+    name: z.string(),
+    avg: z.number()
+})
+
+export type bookingAvgDataType = z.infer<typeof bookingAvgDataSchema>;
+
+export const bookingAvgSchema = z.object({
+    type: z.string(),
+    data: z.array(bookingAvgDataSchema),
+});
+
+export type bookingAvgEntity = z.infer<typeof bookingAvgSchema>;
