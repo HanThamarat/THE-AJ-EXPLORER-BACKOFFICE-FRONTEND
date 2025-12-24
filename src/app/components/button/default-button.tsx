@@ -43,6 +43,7 @@ export default function DefaultButton({
                 className="w-full"
                 onClick={onClick}
                 htmlType={ type === undefined ? 'button' : type }
+                disabled={isLoading}
             >
                 {
                     isLoading === false || isLoading === undefined ?
