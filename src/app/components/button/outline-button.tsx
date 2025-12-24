@@ -43,6 +43,7 @@ export default function DefaultOutlineButton({
                 className="w-full"
                 onClick={onClick}
                 htmlType={ type === undefined ? 'button' : type }
+                disabled={isLoading}
             >
                 {
                     isLoading === false || isLoading === undefined ?
