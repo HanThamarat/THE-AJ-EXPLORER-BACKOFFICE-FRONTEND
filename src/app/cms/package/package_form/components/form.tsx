@@ -26,7 +26,7 @@ import FileMockup from "@/app/assets/images/svg/file_mocup.svg";
 import { useRouter, useSearchParams } from "next/navigation";
 import DefaultOutlineButton from "@/app/components/button/outline-button";
 import { ConfirmModal } from "@/app/components/modal/default-modal";
-import { createPacakage } from "@/app/store/slice/packageManagement";
+import { createPacakage, updatePackage } from "@/app/store/slice/packageManagement";
 import { packageSelector } from "@/app/store/slice/packageManagement";
 import { getPackagebyId } from "@/app/store/slice/packageManagement";
 import notify from '@/app/components/alert/toastify';
@@ -122,18 +122,31 @@ export default function PacakageFormComponent() {
 
     const hadleConfirmCreate = async () => {
         try {
-            const response: any = await dispatch(createPacakage(packageData));
+
+            let updateData = {
+                packageId: 0,
+                data: packageData,
+            };
+
+            if (packageId) {
+                updateData = {
+                    packageId: Number(packageId),
+                    data: packageData
+                };
+            }
+
+            const response: any = packageId ? await dispatch(updatePackage(updateData)) : await dispatch(createPacakage(packageData));
 
             if (response.payload.status) {
                 await setComfirmModalIsOpen(false);
                 await reset();
                 notify({
-                    label:"Createing a package successfully!",
+                    label: packageId ? "Update a package successfully!" : "Createing a package successfully!",
                     type: 'success'
                 });
                 router.push('/cms/package');
             } else {
-                throw response?.payload?.error ?  response?.payload?.error : "Createing package something wrong."
+                throw response?.payload?.error ?  response?.payload?.error : packageId ? "Update a package something wrong." : "Createing package something wrong."
             }
         } catch (error: any) {
             await setComfirmModalIsOpen(false);
@@ -204,7 +217,9 @@ export default function PacakageFormComponent() {
 
         if (packageId) {
             fecthPackageByid();          
-            
+        }
+
+        if (packageByid) {
             onChangeProvince(packageByid?.provinceId as number);
             if (packageByid?.district) handlerChangeDisTrict(packageByid.districtId as number);
         
@@ -233,7 +248,7 @@ export default function PacakageFormComponent() {
 
             setIsLoading(false);
         }
-    }, [dispatch, packageId]);
+    }, [dispatch, packageId, packageByid]);
 
     const onChangeProvince = async (data: number) => {
         setDistrictOption([]);
@@ -263,16 +278,16 @@ export default function PacakageFormComponent() {
     return(
         isLoading === false && <>
         <ConfirmModal
-            title="Do you want to Create Package ?"
-            description="Confirm to proceed with Creation this package."
+            title={ packageId ? 'Do you want to update package ?' : 'Do you want to create package ?'}
+            description={ packageId ? 'Confirm to proceed with update this package.' : 'Confirm to proceed with Creation this package.'}
             open={comfirmModalIsOpen}
             cancalFunc={() => setComfirmModalIsOpen(false)}
             confirmFunc={hadleConfirmCreate}
         />
         <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="w-full">
             <div className="mt-[20px]">
-                <span className="text-[18px] font-medium">Create New Package</span>
-                <span className="block text-gray-600">Please enter form below for create your package.</span>
+                <span className="text-[18px] font-medium">{ packageId ? 'Update New Package' : 'Create New Package' }</span>
+                <span className="block text-gray-600">{ packageId ? 'Please enter form below for update your package.' : 'Please enter form below for create your package.' }</span>
             </div>
             <div className="w-full p-[20px] bg-white mt-[10px] rounded-[20px] flex justify-between gap-[10px]">
                 <div className="w-full">
@@ -568,7 +583,7 @@ export default function PacakageFormComponent() {
                         </div>
                         <div className="w-[35%]">
                             <DefaultButton
-                                label="Add new package"
+                                label={ packageId ? "Update package" : "Add new package" }
                                 type="submit"
                             />
                         </div>
