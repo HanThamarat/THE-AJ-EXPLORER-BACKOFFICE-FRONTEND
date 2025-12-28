@@ -25,6 +25,21 @@ export const createPacakage = createAsyncThunk('packageManagement/createPacakage
     }
 });
 
+interface updatePackageProps {
+    packageId: number;
+    data: packageBackDTO | null;
+}
+
+export const updatePackage = createAsyncThunk('packageManagement/updatePackage', async(data: updatePackageProps) => {
+    try {
+        const response = await AxiosInstance.put(`/packagemanagement/package/${data.packageId}`, data.data);
+
+        return { status: true, data: response.data.body };
+    } catch (error: any) {
+        return { status: false, error: error?.response.data.error };
+    }
+});
+
 export const getPackagebyId = createAsyncThunk('packageManagement/getPackagebyId', async (id: number) => {
     try {
         const response = await AxiosInstance.get(`/packagemanagement/package/${id}`);
@@ -33,7 +48,7 @@ export const getPackagebyId = createAsyncThunk('packageManagement/getPackagebyId
     } catch (error: any) {
         return { status: false, error: error?.response.data.error };
     }
-})
+});
 
 interface packageType {
     packages: packageEntity[] | [] | null;
@@ -74,6 +89,10 @@ const packageSlice = createSlice({
                     ];
                 } else if (action.type.includes('getPackagebyId')) {
                     state.packageByid = action.payload.data as packageEntity;
+                } else if (action.type.includes('updatePackage')) {
+                    state.packages = (state?.packages ?? [])
+                    .map((packageData) => packageData.id === action.payload.data.id ? action.payload.data : packageData)
+                    .sort((a, b) =>  new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
                 }
             }
         )
