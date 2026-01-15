@@ -88,6 +88,15 @@ const bookingSlice = createSlice({
                     state.bookingDetail = action.payload.data as bookingDetailEntityType;
                 } else if (action.type.includes("updateBookingStatus")) {
                     state.bookingDetail = action.payload.data as bookingDetailEntityType;
+                    const bookingData = action.payload.data as bookingDetailEntityType;
+                    if (!bookingData) return;
+                    state.bookings = (state.bookings ?? [])
+                    .map((item) => item.bookingId === bookingData.bookingId ? 
+                    {
+                        ...item,
+                        bookingStatus: bookingData.bookingStatus as "panding" | "confirmed" | "failed"
+                    }
+                    : item);
                 }
             }
         )
