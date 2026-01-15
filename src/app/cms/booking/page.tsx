@@ -1,7 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react";
-import { getAllBooking } from "@/app/store/slice/bookingSlice";
+import { Drawer } from "antd";
+import { IoEyeOutline } from "react-icons/io5";
+import { getAllBooking, findBookingDetail } from "@/app/store/slice/bookingSlice";
 import { bookingSelector } from "@/app/store/slice/bookingSlice";
 import { useAppDispatch } from "@/app/hook/appDispatch";
 import { useSelector } from "react-redux";
@@ -11,14 +13,17 @@ import DefaultEmpty from "@/app/components/empty/default-emtpy";
 import { bookingEntity } from "@/app/types/booking";
 import { ColumnDef } from "@tanstack/react-table";
 import dateFormat from "dateformat";
+import BookingDetailCanvas from "./content-detail/booking-detail";
 
 export default function BookingPage() {
 
     const dispatch = useAppDispatch();
-    const { bookings } = useSelector(bookingSelector);
+    const { bookings, bookingDetail } = useSelector(bookingSelector);
     const [ bookingTableData, setBookingTableData ] = useState<bookingEntity[]>([]);
     const [ isLoading, setIsLoading ] = useState<boolean>(true);
+    const [ drawerBookingId, setDrawerBookingId ] = useState<string | null>(null);
     const isFaching = useRef(false);
+    const isFachingBookingDetail = useRef(false);
 
     useEffect(() => {
         const fecthBooking = async () => {
@@ -51,6 +56,22 @@ export default function BookingPage() {
         bookings !== null && setIsLoading(false);
     }, [dispatch, bookings]);
 
+
+    const handleOpenDetail = async (bookingId: string) => {
+        setDrawerBookingId(bookingId);
+        if (isFaching.current) return;
+        isFaching.current = true;
+        await dispatch(findBookingDetail(bookingId));
+        isFaching.current = false;
+    };
+
+    const handleCloseDetail = () => {
+        setDrawerBookingId(null);
+    };
+
+    const handlerCloseDrawer = (value: boolean) => {
+        setDrawerBookingId(null);
+    };
 
     const columns: ColumnDef<bookingEntity>[] = [
         {
@@ -139,11 +160,13 @@ export default function BookingPage() {
             header: "",
             cell: ({ row }) => (
                 <div className="flex gap-[10px] items-center">
-
+                    <button onClick={() => handleOpenDetail(row.original.bookingId as string)}>
+                        <IoEyeOutline className="text-[24px]" />
+                    </button>
                 </div>
             )
         }
-    ]
+    ];
 
     return(
         <>
@@ -167,6 +190,15 @@ export default function BookingPage() {
                     )
                 }
             </div>
+
+            <Drawer
+                closable={false}
+                onClose={handleCloseDetail}
+                open={drawerBookingId !== null}
+                width={750}
+            >
+                <BookingDetailCanvas bookingDetail={bookingDetail} onClose={handlerCloseDrawer} />
+            </Drawer>
         </>
     );
 }
