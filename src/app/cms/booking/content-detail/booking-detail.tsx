@@ -19,7 +19,7 @@ export default function BookingDetailCanvas({
 
     const dispatch = useAppDispatch();
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [isOpenbookingSelector, setIsOpenbookingSelector] = useState<boolean>(true);
+    const [isOpenbookingSelector, setIsOpenbookingSelector] = useState<boolean>(false);
     const [bookingStatusSelected, setBookingStatusSelected] = useState<"confirmed" | "panding" | "failed">("panding");
 
     const bookingStatusList = [
