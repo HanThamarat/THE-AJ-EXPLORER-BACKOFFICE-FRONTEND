@@ -192,7 +192,7 @@ export default function BookingAvgChart({
             <div className="flex justify-between items-start mb-8 relative z-10">
             <div>
                 <h2 className="text-gray-400 text-sm font-medium mb-1">Activity</h2>
-                <h1 className="text-2xl font-bold text-[#0f172a]">Average books</h1>
+                <h1 className="text-2xl font-bold text-[#0f172a]">Average bookings</h1>
             </div>
             
             {/* Dropdown Container */}
