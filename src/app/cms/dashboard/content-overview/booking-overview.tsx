@@ -33,7 +33,7 @@ export default function BookingOverview() {
         if (bookOverview !== null) {
             const filterdata: overviewEntityType[] = bookOverview.map((Item, key) => ({
                 index: key + 1,
-                amount: CurrencyConvert.currencyConvertToThai(Item.amount as number),
+                amount: `${CurrencyConvert.currencyConvertToThai(Item.amount as number)} THB`,
                 packageName: Item.packageName,
                 booker: Item.booker,
                 bookingId: Item.bookingId,
@@ -59,7 +59,8 @@ export default function BookingOverview() {
             },
             {
                 accessorKey: "packageName",
-                header: "Package name"
+                header: "Package name",
+                cell: ({ row }) => (<div className="max-w-[120px] text-ellipsis line-clamp-1">{row.original.packageName}</div>)
             },
             {
                 accessorKey: "booker",
