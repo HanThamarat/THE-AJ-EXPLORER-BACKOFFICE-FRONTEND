@@ -79,8 +79,8 @@ export default function PopularProvinceCard() {
     [labels, valuesPct, colors]
   );
 
-  // ✅ tooltip uses popular, so include it in deps
-  const options: ChartOptions<"bar"> = useMemo(
+  // tooltip uses popular, so include it in deps
+  const options: any = useMemo(
     () => ({
       indexAxis: "y",
       responsive: true,
@@ -90,7 +90,7 @@ export default function PopularProvinceCard() {
         tooltip: {
           displayColors: false,
           callbacks: {
-            label: (ctx) => {
+            label: (ctx: any) => {
               const pct = ctx.parsed.x ?? 0;
               const rawQty = popular[ctx.dataIndex]?.qty ?? 0;
               return ` ${pct}% (${rawQty})`;
@@ -116,7 +116,7 @@ export default function PopularProvinceCard() {
           ticks: {
             stepSize: 50,
             color: "#6B6FA6",
-            callback: (value) => `${value}%`,
+            callback: (value: any) => `${value}%`,
             font: { size: 12, weight: "500" },
           },
         },
