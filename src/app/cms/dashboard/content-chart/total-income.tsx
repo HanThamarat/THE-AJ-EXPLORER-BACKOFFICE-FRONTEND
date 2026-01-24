@@ -124,7 +124,7 @@ export default function TotalIncomeCard() {
     [labels, values, activeIndex]
   );
 
-  const options: ChartOptions<"line"> = useMemo(
+  const options: any = useMemo(
     () => ({
       responsive: true,
       maintainAspectRatio: false,
@@ -168,7 +168,7 @@ export default function TotalIncomeCard() {
           ticks: {
             color: "#6B6FA6",
             font: { size: 12, weight: "500" },
-            callback: (val) => formatK(Number(val)),
+            callback: (val: number) => formatK(Number(val)),
           },
         },
       },
