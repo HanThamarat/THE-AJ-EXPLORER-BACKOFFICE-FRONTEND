@@ -186,7 +186,7 @@ export default function BookingAvgChart({
 
 
     return(
-        <div className="w-full bg-white rounded-3xl p-8">
+        <div className="w-full h-full bg-white rounded-3xl p-8">
             
             {/* Header Section */}
             <div className="flex justify-between items-start mb-8 relative z-10">
@@ -238,7 +238,7 @@ export default function BookingAvgChart({
             <div className="relative h-64 w-full">
                 {
                     isLoading ?
-                    <div className='w-full animate-pulse duration-100 grid grid-cols-1 gap-[10px] ease-linear'>
+                    <div className='w-full  mt-[50px] animate-pulse duration-100 grid grid-cols-1 gap-[10px] ease-linear'>
                         <div className='w-full h-[20px] bg-gray-200 rounded-[10px]'></div>
                         <div className='w-full h-[20px] bg-gray-200 rounded-[10px]'></div>
                         <div className='w-full h-[20px] bg-gray-200 rounded-[10px]'></div>

@@ -9,6 +9,7 @@ import financialReducer from "./slice/financialSlice";
 import promotionReducer from "./slice/promotionSlice";
 import blogReducer from "./slice/blogManagement";
 import bookingReducer from "./slice/bookingSlice";
+import kpiReducer from "./slice/kpiSlice";
 
 export const store = configureStore({
     reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
         promotion: promotionReducer,
         blog: blogReducer,
         booking: bookingReducer,
+        kpi: kpiReducer,
     },
     devTools: process.env.NODE_ENV !== 'production',
 });
