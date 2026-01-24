@@ -62,8 +62,8 @@ export default function BookingOverview() {
                 header: "Package name"
             },
             {
-                accessorKey: "packageName",
-                header: "Package name"
+                accessorKey: "booker",
+                header: "Booker name"
             },
             {
                 accessorKey: "bookingStatus",
