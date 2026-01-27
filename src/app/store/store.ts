@@ -10,6 +10,7 @@ import promotionReducer from "./slice/promotionSlice";
 import blogReducer from "./slice/blogManagement";
 import bookingReducer from "./slice/bookingSlice";
 import kpiReducer from "./slice/kpiSlice";
+import cancelReducer from "./slice/cancelSlice";
 
 export const store = configureStore({
     reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
         blog: blogReducer,
         booking: bookingReducer,
         kpi: kpiReducer,
+        cancel: cancelReducer,
     },
     devTools: process.env.NODE_ENV !== 'production',
 });

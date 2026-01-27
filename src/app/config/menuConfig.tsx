@@ -20,8 +20,8 @@ export const menu: MenuItem[] = [
     icon: <Image src={booking} alt="" />,
     subItems: [
       { label: "Booking", path: "/cms/booking" },
-      { label: "Cancel", path: "/settings/profile" },
-      { label: "Refund", path: "/settings/profile" },
+      { label: "Cancel", path: "/cms/cancel" },
+      { label: "Refund", path: "/cms/booking" },
     ],
   },
   {

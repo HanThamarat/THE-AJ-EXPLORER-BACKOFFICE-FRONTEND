@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "@/app/hook/appDispatch";
 import { getTotalIncome, kpiSelector } from "@/app/store/slice/kpiSlice";
 import { bookingAvgDataType } from "@/app/types/booking";
+import DefaultEmpty from "@/app/components/empty/default-emtpy";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Filler);
 
@@ -201,7 +202,9 @@ export default function TotalIncomeCard() {
             ))}
           </div>
         ) : income.length === 0 ? (
-          <div className="text-sm text-gray-400">No data</div>
+          <div className="w-full h-full flex justify-center items-center">
+            <DefaultEmpty />
+          </div>
         ) : (
           <Line data={data} options={options} plugins={[activeVerticalLinePlugin]} />
         )}

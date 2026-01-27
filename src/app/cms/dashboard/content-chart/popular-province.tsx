@@ -14,6 +14,7 @@ import { useAppDispatch } from "@/app/hook/appDispatch";
 import { useSelector } from "react-redux";
 import { getPopularProvince, kpiSelector } from "@/app/store/slice/kpiSlice";
 import { popularProviceType } from "@/app/types/kpi";
+import DefaultEmpty from "@/app/components/empty/default-emtpy";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
@@ -140,7 +141,9 @@ export default function PopularProvinceCard() {
             ))}
           </div>
         ) : popular.length === 0 ? (
-          <div className="text-sm text-gray-400">No data</div>
+          <div className="w-full h-full flex justify-center items-center">
+            <DefaultEmpty />
+          </div>
         ) : (
           <Bar data={data} options={options} />
         )}
