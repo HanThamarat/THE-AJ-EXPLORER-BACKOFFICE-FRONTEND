@@ -106,7 +106,7 @@ export default function CancelDetail({
         <div className="mt-[24px] w-full flex flex-col gap-[24px] border border-gray-200 rounded-[15px] p-[20px]">
             <div className="flex flex-col">
                 <span className="text-[18px] font-semibold">Cancel Detail</span>
-                <span>Get detailed information about the Booking.</span>
+                <span>Get detailed information about the cancel.</span>
             </div>
             <div className="grid grid-cols-2 2xl:grid-cols-4 gap-[15px] justify-between">
                 <div className="flex flex-col">

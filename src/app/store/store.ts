@@ -11,6 +11,7 @@ import blogReducer from "./slice/blogManagement";
 import bookingReducer from "./slice/bookingSlice";
 import kpiReducer from "./slice/kpiSlice";
 import cancelReducer from "./slice/cancelSlice";
+import refundReducer from "./slice/refundSlice";
 
 export const store = configureStore({
     reducer: {
@@ -25,6 +26,7 @@ export const store = configureStore({
         booking: bookingReducer,
         kpi: kpiReducer,
         cancel: cancelReducer,
+        refund: refundReducer,
     },
     devTools: process.env.NODE_ENV !== 'production',
 });
