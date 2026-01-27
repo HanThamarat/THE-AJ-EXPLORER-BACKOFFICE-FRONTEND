@@ -183,7 +183,7 @@ export default function BookingPage() {
                     (
                     bookingTableData.length !== 0 ?
                         <div className="pb-[20px]">
-                            <DataTable data={bookingTableData} columns={columns} globalFilter={false} />
+                            <DataTable data={bookingTableData} columns={columns} globalFilter={true} />
                         </div>
                         :
                         <DefaultEmpty />
