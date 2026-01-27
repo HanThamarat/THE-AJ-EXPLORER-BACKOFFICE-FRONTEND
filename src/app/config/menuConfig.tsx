@@ -21,7 +21,7 @@ export const menu: MenuItem[] = [
     subItems: [
       { label: "Booking", path: "/cms/booking" },
       { label: "Cancel", path: "/cms/cancel" },
-      { label: "Refund", path: "/cms/booking" },
+      { label: "Refund", path: "/cms/refund" },
     ],
   },
   {
