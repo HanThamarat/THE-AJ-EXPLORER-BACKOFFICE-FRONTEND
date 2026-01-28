@@ -33,22 +33,22 @@ export const menu: MenuItem[] = [
       { label: "Package Type", path: "/cms/package_type" },
     ],
   },
-  {
-    label: "User Management",
-    icon: <Users />,
-    subItems: [
-      { label: "All Users", path: "/cms/usermanagement" },
-      { label: "Add User", path: "/cms/usermanagement/add" },
-    ],
-  },
+  // {
+  //   label: "User Management",
+  //   icon: <Users />,
+  //   subItems: [
+  //     { label: "All Users", path: "/cms/usermanagement" },
+  //     { label: "Add User", path: "/cms/usermanagement/add" },
+  //   ],
+  // },
   {
     label: "Blog",
     icon: <Image src={compass} alt="" />,
     path: "/cms/blog",
   },
-  {
-    label: "Contact us",
-    icon: <Image src={inbox} alt="" />,
-    path: "/cms/contact",
-  }
+  // {
+  //   label: "Contact us",
+  //   icon: <Image src={inbox} alt="" />,
+  //   path: "/cms/contact",
+  // }
 ];
